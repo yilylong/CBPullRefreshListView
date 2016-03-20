@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="article_listview_selected_color">#f1f1f1</color>
+    <color name="white">#FFFFFF</color>
+    <color name="pull2refresh_top_bg">#ECEDED</color>
+    <color name="green">#19BF80</color>
+</resources>
