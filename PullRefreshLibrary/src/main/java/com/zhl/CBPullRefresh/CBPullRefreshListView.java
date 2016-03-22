@@ -30,18 +30,18 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private int headersCount;
 	// -- header view
 	private CBRefreshHeaderView mHeaderView;
+	// -- footer view
+	private CBRefreshHeaderView mFooterView;
 	// header view content, use it to calculate the Header's height. And hide it
 	// when disable pull refresh.
 	private RelativeLayout mHeaderViewContent;
 	private TextView mHeaderTimeView;
 	private int mHeaderViewHeight; // header view's height
 	private boolean mEnablePullRefresh = true;
-	private boolean mPullRefreshing = false; // is refreashing.
 
-	// -- footer view
-	private CBRefreshFooter mFooterView;
+	private boolean mPullRefreshing = false; // is refreashing.
 	private boolean mEnablePullLoad;
-	private boolean mPullLoading;
+	private boolean mPullLoading;// 正在上拉
 	private boolean mIsFooterReady = false;
 
 	// total list items, used to detect is at the bottom of listview.
@@ -169,11 +169,11 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	public void setPullLoadMoreEnable(boolean enable) {
 		mEnablePullLoad = enable;
 		if (!mEnablePullLoad) {
-			mFooterView.hide();
+			((CBRefreshFooter)mFooterView).hide();
 			mFooterView.setOnClickListener(null);
 		} else {
 			mPullLoading = false;
-			mFooterView.show();
+			((CBRefreshFooter)mFooterView).show();
 			mFooterView.setState(CBRefreshFooter.STATE_NORMAL);
 			// both "pull up" and "click" will invoke load more.
 			mFooterView.setOnClickListener(new OnClickListener() {
@@ -275,7 +275,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		if(!mEnablePullLoad){
 			return;
 		}
-		int height = mFooterView.getBottomMargin() + (int) delta;
+		int height = ((CBRefreshFooter)mFooterView).getBottomMargin() + (int) delta;
 		if (mEnablePullLoad && !mPullLoading) {
 			if (height > PULL_LOAD_MORE_DELTA) { // height enough to invoke load more.
 				mFooterView.setState(CBRefreshFooter.STATE_READY);
@@ -283,13 +283,13 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 				mFooterView.setState(CBRefreshFooter.STATE_NORMAL);
 			}
 		}
-		mFooterView.setBottomMargin(height);
+		((CBRefreshFooter)mFooterView).setBottomMargin(height);
 
 		// setSelection(mTotalItemCount - 1); // scroll to bottom
 	}
 
 	private void resetFooterHeight() {
-		int bottomMargin = mFooterView.getBottomMargin();
+		int bottomMargin = ((CBRefreshFooter)mFooterView).getBottomMargin();
 		if (bottomMargin > 0) {
 			mScrollBack = SCROLLBACK_FOOTER;
 			mScroller.startScroll(0, bottomMargin, 0, -bottomMargin, SCROLL_DURATION);
@@ -299,7 +299,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	private void startLoadMore() {
 		mPullLoading = true;
-		mFooterView.setState(CBRefreshFooter.STATE_LOADING);
+		((CBRefreshFooter)mFooterView).setState(CBRefreshState.STATE_REFRESHING);
 		if (mPullRefreshListener != null) {
 			mPullRefreshListener.onLoadMore();
 		}
@@ -318,6 +318,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		case MotionEvent.ACTION_MOVE:
 			final float deltaY = ev.getRawY() - mLastY;
 			mLastY = ev.getRawY();
+			// 下拉
 			if (getFirstVisiblePosition() == 0 && (((CBRefreshHeader) mHeaderView).getVisiableHeight() > 0 || deltaY > 0)) {
 				// the first item is showing, header has shown or pull down.
 				if(showTopSearchBar&&topSearchView.getVisiableHeight()<topSearchBarHeight){
@@ -330,7 +331,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 					invokeOnScrolling();
 				}
 				
-			} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getBottomMargin() > 0 || deltaY < 0)) {
+			} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (((CBRefreshFooter)mFooterView).getBottomMargin() > 0 || deltaY < 0)) {// 上拉
 				// last item, already pulled up or want to pull up.
 				updateFooterHeight(-deltaY / OFFSET_RADIO);
 			}
@@ -349,7 +350,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 				resetHeaderHeight();
 			} else if (getLastVisiblePosition() == mTotalItemCount - 1) {
 				// invoke load more.
-				if (mEnablePullLoad && mFooterView.getBottomMargin() > PULL_LOAD_MORE_DELTA) {
+				if (mEnablePullLoad && ((CBRefreshFooter)mFooterView).getBottomMargin() > PULL_LOAD_MORE_DELTA) {
 					startLoadMore();
 				}
 				resetFooterHeight();
@@ -385,7 +386,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			if (mScrollBack == SCROLLBACK_HEADER) {
 				((CBRefreshHeader) mHeaderView).setVisiableHeight(mScroller.getCurrY());
 			} else {
-				mFooterView.setBottomMargin(mScroller.getCurrY());
+				((CBRefreshFooter)mFooterView).setBottomMargin(mScroller.getCurrY());
 			}
 			postInvalidate();
 			invokeOnScrolling();
@@ -431,7 +432,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	 */
 	public void setFooterBg(int resName){
 		if(mFooterView!=null){
-			mFooterView.setFooterBg(resName);
+			((CBRefreshFooter)mFooterView).setFooterBg(resName);
 		}
 	}
 	/**

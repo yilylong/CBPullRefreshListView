@@ -145,4 +145,33 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
         headrAnimView.setTextColor(color);
     }
 
+    @Override
+    public void setState() {
+
+    }
+
+    @Override
+    public void pullToRefresh() {
+
+    }
+
+    @Override
+    public void releaseToRefresh() {
+
+    }
+
+    @Override
+    public void setRefreshing() {
+
+    }
+
+    @Override
+    public void dropToLoadmore() {
+
+    }
+
+    @Override
+    public void releaseToLoadmore() {
+
+    }
 }

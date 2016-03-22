@@ -4,7 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
 
-public abstract class CBRefreshHeaderView extends LinearLayout implements CBPullRefreshListView.OnHeaderAnimationListenr {
+public abstract class CBRefreshHeaderView extends LinearLayout implements CBPullRefreshListView.OnHeaderAnimationListenr,CBRefreshState {
     public CBRefreshHeaderView(Context context) {
         this(context, null);
     }

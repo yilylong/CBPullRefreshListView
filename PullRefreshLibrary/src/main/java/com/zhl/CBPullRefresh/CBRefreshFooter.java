@@ -8,7 +8,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 
-public class CBRefreshFooter extends LinearLayout {
+public class CBRefreshFooter extends CBRefreshHeaderView {
 	public final static int STATE_NORMAL = 0;
 	public final static int STATE_READY = 1;
 	public final static int STATE_LOADING = 2;
@@ -27,6 +27,11 @@ public class CBRefreshFooter extends LinearLayout {
 	public CBRefreshFooter(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		initView(context);
+	}
+
+	@Override
+	public void setHeaderAnimTextColor(int color) {
+
 	}
 
 	public void setState(int state) {
@@ -110,5 +115,35 @@ public class CBRefreshFooter extends LinearLayout {
 	 */
 	public void setFooterBg(int resName){
 		mContentView.setBackgroundResource(resName);
+	}
+
+	@Override
+	public void setState() {
+
+	}
+
+	@Override
+	public void pullToRefresh() {
+
+	}
+
+	@Override
+	public void releaseToRefresh() {
+
+	}
+
+	@Override
+	public void setRefreshing() {
+
+	}
+
+	@Override
+	public void dropToLoadmore() {
+
+	}
+
+	@Override
+	public void releaseToLoadmore() {
+
 	}
 }
