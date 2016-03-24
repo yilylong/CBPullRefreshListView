@@ -2,6 +2,7 @@ package com.zhl.CBPullRefresh;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,12 +11,11 @@ import android.view.animation.DecelerateInterpolator;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
-import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Scroller;
-import android.widget.TextView;
+
+import com.zhl.CBPullRefresh.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -32,10 +32,6 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private CBRefreshHeaderView mHeaderView;
 	// -- footer view
 	private CBRefreshHeaderView mFooterView;
-	// header view content, use it to calculate the Header's height. And hide it
-	// when disable pull refresh.
-	private RelativeLayout mHeaderViewContent;
-	private TextView mHeaderTimeView;
 	private int mHeaderViewHeight; // header view's height
 	private boolean mEnablePullRefresh = true;
 
@@ -53,17 +49,14 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private final static int SCROLLBACK_FOOTER = 1;
 
 	private final static int SCROLL_DURATION = 200; // scroll back duration
-	private final static int PULL_LOAD_MORE_DELTA = 120; // when pull up >= 120px
-															// at bottom,
-															// trigger
-															// load more.
+	private final static int PULL_LOAD_MORE_DELTA = 150; // when pull up >= 150px
 	private final static float OFFSET_RADIO = 2.3f; // support iOS like pull
 													// feature.
 	private boolean showTopSearchBar = false;
-	private CBRefreshTopSearchView topSearchView;
-	private ImageView topSearch;
+	private CBRefreshHeaderView topSearchView;
 	private int topSearchBarHeight=0;
 	private OnSearchClickListener searchClickListener;
+	private long refreshTime;
 	/**
 	 * @param context
 	 */
@@ -84,30 +77,17 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	private void initWithContext(Context context) {
 		mScroller = new Scroller(context, new DecelerateInterpolator());
-		// cbrefresh need the scroll event, and it will dispatch the event to
-		// user's listener (as a proxy).
 		super.setOnScrollListener(this);
 		// init header view
 		mHeaderView = new CBRefreshHeader(context);
-		mHeaderViewContent = (RelativeLayout) mHeaderView.findViewById(R.id.cbrefresh_header_content);
-		mHeaderTimeView = (TextView) mHeaderView.findViewById(R.id.cbrefresh_header_time);
 		addHeaderView(mHeaderView);
-		mTotalItemCount++;
+		headersCount++;
 
 		// init header height
-		mHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			@Override
-			public void onGlobalLayout() {
-				mHeaderViewHeight = mHeaderViewContent.getHeight();
-				getViewTreeObserver().removeGlobalOnLayoutListener(this);
-			}
-		});
+		initHeaderHeight();
 
 		topSearchView = new CBRefreshTopSearchView(context);
-		topSearch = (ImageView) topSearchView.findViewById(R.id.pull2reresh_top_search);
-//		topSearch.setBackgroundResource(MyApplication.getInstance().isNightStyle()?R.drawable.home_search_bar:R.drawable.home_search_bar);
-		topSearch.setOnClickListener(new OnClickListener() {
-
+		topSearchView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				if (searchClickListener != null) {
@@ -116,22 +96,41 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			}
 		});
 		addHeaderView(topSearchView);
-		mTotalItemCount++;
-		topSearchView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			@Override
-			public void onGlobalLayout() {
-				topSearchBarHeight = topSearch.getHeight();
-				getViewTreeObserver().removeGlobalOnLayoutListener(this);
-			}
-		});
-
+		headersCount++;
+		initTopsearchViewHeight();
 
 		// init footer view
 		mFooterView = new CBRefreshFooter(context);
-
 		// headerview 和footer 与内容之间无分割线
 		setHeaderDividersEnabled(false);
-		
+	}
+
+	private void initTopsearchViewHeight() {
+		topSearchView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				topSearchBarHeight = topSearchView.getRealHeaderContentHeight();
+				if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN){
+					getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				}else{
+					getViewTreeObserver().removeGlobalOnLayoutListener(this);
+				}
+			}
+		});
+	}
+
+	private void initHeaderHeight() {
+		mHeaderView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+			@Override
+			public void onGlobalLayout() {
+				mHeaderViewHeight = mHeaderView.getRealHeaderContentHeight();
+				if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN){
+					getViewTreeObserver().removeOnGlobalLayoutListener(this);
+				}else{
+					getViewTreeObserver().removeGlobalOnLayoutListener(this);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -154,11 +153,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	 */
 	public void setPullRefreshEnable(boolean enable) {
 		mEnablePullRefresh = enable;
-		if (!mEnablePullRefresh) { // disable, hide the content
-			mHeaderViewContent.setVisibility(View.INVISIBLE);
-		} else {
-			mHeaderViewContent.setVisibility(View.VISIBLE);
-		}
+		mHeaderView.setPullRefreshEnable(mEnablePullRefresh);
 	}
 
 	/**
@@ -169,12 +164,13 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	public void setPullLoadMoreEnable(boolean enable) {
 		mEnablePullLoad = enable;
 		if (!mEnablePullLoad) {
-			((CBRefreshFooter)mFooterView).hide();
+			mFooterView.footerViewHide();
 			mFooterView.setOnClickListener(null);
 		} else {
 			mPullLoading = false;
-			((CBRefreshFooter)mFooterView).show();
-			mFooterView.setState(CBRefreshFooter.STATE_NORMAL);
+			mFooterView.footerViewShow();
+			mFooterView.setState(CBRefreshState.STATE_PULL_UP_TO_LOADMORE);
+			mFooterView.pullUpToLoadmore();
 			// both "pull up" and "click" will invoke load more.
 			mFooterView.setOnClickListener(new OnClickListener() {
 				@Override
@@ -210,7 +206,8 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	public void stopLoadMore() {
 		if (mPullLoading == true) {
 			mPullLoading = false;
-			mFooterView.setState(CBRefreshFooter.STATE_NORMAL);
+			mFooterView.pullUpToLoadmore();
+			mFooterView.setState(CBRefreshState.STATE_PULL_UP_TO_LOADMORE);
 		}
 	}
 
@@ -224,9 +221,22 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		if (null == time) {
 			Date now = new Date();
 			SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
-			mHeaderTimeView.setText(dateFormat.format(now));
+			mHeaderView.setRefreshTime(dateFormat.format(now));
 		} else {
-			mHeaderTimeView.setText(time);
+			mHeaderView.setRefreshTime(time);
+		}
+	}
+
+	/**
+	 * 设置刷新时间
+	 * @param time
+	 */
+	public void setRefreshTime(long time){
+		if(time<=0){
+			setRefreshTime(null);
+		}else{
+			refreshTime = time;
+			setRefreshTime(Utils.getTimeDifferent(time));
 		}
 	}
 
@@ -238,12 +248,14 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	private void updateHeaderHeight(float delta) {
-		((CBRefreshHeader) mHeaderView).setVisiableHeight((int) delta + ((CBRefreshHeader) mHeaderView).getVisiableHeight());
+		mHeaderView.setVisiableHeight((int) delta + mHeaderView.getVisiableHeight());
 		if (mEnablePullRefresh && !mPullRefreshing) { // 未处于刷新状态，更新箭头
-			if (((CBRefreshHeader) mHeaderView).getVisiableHeight() > mHeaderViewHeight) {
-				((CBRefreshHeader) mHeaderView).setState(CBRefreshHeader.STATE_READY);
+			if (mHeaderView.getVisiableHeight() > mHeaderViewHeight) {
+				mHeaderView.releaseToRefresh();
+				mHeaderView.setState(CBRefreshState.STATE_RELEASE_TO_REFRESH);
 			} else {
-				((CBRefreshHeader) mHeaderView).setState(CBRefreshHeader.STATE_NORMAL);
+				mHeaderView.pullToRefresh();
+				mHeaderView.setState(CBRefreshState.STATE_PULL_TO_REFRESH);
 			}
 		}
 		setSelection(0); // scroll to top each time
@@ -253,7 +265,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	 * reset header view's height.
 	 */
 	private void resetHeaderHeight() {
-		int height = ((CBRefreshHeader) mHeaderView).getVisiableHeight();
+		int height = mHeaderView.getVisiableHeight();
 		if (height == 0) // not visible.
 			return;
 		// refreshing and header isn't shown fully. do nothing.
@@ -275,21 +287,23 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		if(!mEnablePullLoad){
 			return;
 		}
-		int height = ((CBRefreshFooter)mFooterView).getBottomMargin() + (int) delta;
+		int height = mFooterView.getLoadMorePullUpDistance() + (int) delta;
 		if (mEnablePullLoad && !mPullLoading) {
 			if (height > PULL_LOAD_MORE_DELTA) { // height enough to invoke load more.
-				mFooterView.setState(CBRefreshFooter.STATE_READY);
+				mFooterView.releaseToLoadmore();
+				mFooterView.setState(CBRefreshState.STATE_RELEASE_TO_LOADMORE);
 			} else {
-				mFooterView.setState(CBRefreshFooter.STATE_NORMAL);
+				mFooterView.pullUpToLoadmore();
+				mFooterView.setState(CBRefreshState.STATE_PULL_UP_TO_LOADMORE);
 			}
 		}
-		((CBRefreshFooter)mFooterView).setBottomMargin(height);
+		mFooterView.setLoadMorePullUpDistance(height);
 
 		// setSelection(mTotalItemCount - 1); // scroll to bottom
 	}
 
 	private void resetFooterHeight() {
-		int bottomMargin = ((CBRefreshFooter)mFooterView).getBottomMargin();
+		int bottomMargin = mFooterView.getLoadMorePullUpDistance();
 		if (bottomMargin > 0) {
 			mScrollBack = SCROLLBACK_FOOTER;
 			mScroller.startScroll(0, bottomMargin, 0, -bottomMargin, SCROLL_DURATION);
@@ -299,7 +313,8 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	private void startLoadMore() {
 		mPullLoading = true;
-		((CBRefreshFooter)mFooterView).setState(CBRefreshState.STATE_REFRESHING);
+		mFooterView.onLoading();
+		mFooterView.setState(CBRefreshState.STATE_REFRESHING);
 		if (mPullRefreshListener != null) {
 			mPullRefreshListener.onLoadMore();
 		}
@@ -319,7 +334,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			final float deltaY = ev.getRawY() - mLastY;
 			mLastY = ev.getRawY();
 			// 下拉
-			if (getFirstVisiblePosition() == 0 && (((CBRefreshHeader) mHeaderView).getVisiableHeight() > 0 || deltaY > 0)) {
+			if (getFirstVisiblePosition() == 0 && (mHeaderView.getVisiableHeight() > 0 || deltaY > 0)) {
 				// the first item is showing, header has shown or pull down.
 				if(showTopSearchBar&&topSearchView.getVisiableHeight()<topSearchBarHeight){
 					updateTopSearchBarHeight(deltaY);
@@ -327,22 +342,26 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 					if(mPullRefreshListener != null){
 						mPullRefreshListener.setUpdateTime();
 					}
+					setRefreshTime(System.currentTimeMillis());
 					updateHeaderHeight(deltaY / OFFSET_RADIO);
+					mHeaderView.onPullDown((int) Math.abs(deltaY / OFFSET_RADIO));
 					invokeOnScrolling();
 				}
 				
-			} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (((CBRefreshFooter)mFooterView).getBottomMargin() > 0 || deltaY < 0)) {// 上拉
+			} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getLoadMorePullUpDistance() > 0 || deltaY < 0)) {// 上拉
 				// last item, already pulled up or want to pull up.
 				updateFooterHeight(-deltaY / OFFSET_RADIO);
+				mFooterView.onPullUp((int) (-deltaY / OFFSET_RADIO));
 			}
 			break;
 		default:
 			mLastY = -1; // reset
 			if (getFirstVisiblePosition() == 0) {
 				// invoke refresh
-				if (mEnablePullRefresh && ((CBRefreshHeader) mHeaderView).getVisiableHeight() > mHeaderViewHeight) {
+				if (mEnablePullRefresh &&mHeaderView.getVisiableHeight() > mHeaderViewHeight) {
 					mPullRefreshing = true;
-					((CBRefreshHeader) mHeaderView).setState(CBRefreshHeader.STATE_REFRESHING);
+					mHeaderView.onRefreshing();
+					mHeaderView.setState(CBRefreshState.STATE_REFRESHING);
 					if (mPullRefreshListener != null) {
 						mPullRefreshListener.onRefresh();
 					}
@@ -350,7 +369,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 				resetHeaderHeight();
 			} else if (getLastVisiblePosition() == mTotalItemCount - 1) {
 				// invoke load more.
-				if (mEnablePullLoad && ((CBRefreshFooter)mFooterView).getBottomMargin() > PULL_LOAD_MORE_DELTA) {
+				if (mEnablePullLoad && mFooterView.getLoadMorePullUpDistance() > PULL_LOAD_MORE_DELTA) {
 					startLoadMore();
 				}
 				resetFooterHeight();
@@ -364,19 +383,19 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	private void resetTopSearchBarHeight() {
 		if(showTopSearchBar && topSearchView != null){
-			topSearchView.setHeight(0);
+			topSearchView.setVisiableHeight(0);
 		}
 	}
 	
 	public void setTopSearchBarHeight() {
 		if(topSearchView != null){
-			topSearchView.setHeight(0);
+			topSearchView.setVisiableHeight(0);
 		}
 	}
 
 	private void updateTopSearchBarHeight(float deltaY) {
 		if(deltaY>20){
-			topSearchView.setHeight(topSearchBarHeight);
+			topSearchView.setVisiableHeight(topSearchBarHeight);
 		}
 	}
 
@@ -384,9 +403,9 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	public void computeScroll() {
 		if (mScroller.computeScrollOffset()) {
 			if (mScrollBack == SCROLLBACK_HEADER) {
-				((CBRefreshHeader) mHeaderView).setVisiableHeight(mScroller.getCurrY());
+				mHeaderView.setVisiableHeight(mScroller.getCurrY());
 			} else {
-				((CBRefreshFooter)mFooterView).setBottomMargin(mScroller.getCurrY());
+				mFooterView.setLoadMorePullUpDistance(mScroller.getCurrY());
 			}
 			postInvalidate();
 			invokeOnScrolling();
@@ -422,7 +441,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	 */
 	public void setHeaderRefreshIcon(int resName){
 		if(mHeaderView!=null){
-			((CBRefreshHeader) mHeaderView).setHeaderRefreshIcon(resName);
+			mHeaderView.setHeaderIcon(resName);
 		}
 	}
 	
@@ -443,30 +462,18 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		this.showTopSearchBar = show;
 	}
 	
-	public void showHeaderAnim(boolean show){
-		if(show){
-			mHeaderView.onAnimStart();
-		}else{
-			mHeaderView.onAnimCancel();
-		}
-	}
-	
-	public void setHeaderAnimTextColor(int color){
-		mHeaderView.setHeaderAnimTextColor(color);
-	}
-	
 	public void setOnPullRefreshListener(OnPullRefreshListener l) {
 		mPullRefreshListener = l;
 	}
 	
-	public void setOnItemClickListener(final OnItemClickListener listener) {
+	public void setOnItemClickListener(final CBPullRefreshListView.OnItemClickListener listener) {
 		this.setOnItemClickListener(new AbsListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				if(listener!=null){
-					//因为这里加了两个头　内容从position-2开始
-					listener.onItemClick(parent, view, position-2, id);
+					//因为这里加了header 必须要减去header数目才是真实的内容position　
+					listener.onItemClick(parent, view, position-headersCount, id);
 				}
 			}
 		});
@@ -485,9 +492,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	public void setTopSearchDrawable(int resid){
-		if(topSearch!=null){
-			topSearch.setBackgroundResource(resid);
-		}
+		topSearchView.setHeaderIcon(resid);
 	}
 	/**
 	 * implements this interface to get refresh/load more event.
@@ -505,9 +510,35 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	public interface OnSearchClickListener{
 		public void onSearchBarClick();
 	}
-	public interface OnHeaderAnimationListenr{
-		public void onAnimStart();
-		public void onAnimCancel();
+
+	public <T extends CBRefreshHeaderView> void setRefreshHeader(T header){
+		if(header==null){
+			return;
+		}
+		removeHeaderView(mHeaderView);
+		removeHeaderView(topSearchView);
+		mHeaderView = header;
+		addHeaderView(mHeaderView);
+		addHeaderView(topSearchView);
+		initHeaderHeight();
+		initTopsearchViewHeight();
 	}
-	
+
+	public <T extends CBRefreshHeaderView> void setLoadMoreFooter(T footer){
+		if(footer==null){
+			return;
+		}
+		this.removeFooterView(mFooterView);
+		this.mFooterView = footer;
+		addFooterView(mFooterView);
+	}
+	public <T extends CBRefreshHeaderView> void setTopSearchBar(T searchBar){
+		if(searchBar==null){
+			return;
+		}
+		this.removeFooterView(topSearchView);
+		this.topSearchView = searchBar;
+		addHeaderView(topSearchView);
+		initTopsearchViewHeight();
+	}
 }

@@ -3,4 +3,7 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="refresh_header_tip_pull2refresh">下拉刷新</string>
+    <string name="refresh_header_tip_release2refresh">松开刷新数据</string>
+    <string name="refresh_header_tip_refreshing">正在加载...</string>
 </resources>

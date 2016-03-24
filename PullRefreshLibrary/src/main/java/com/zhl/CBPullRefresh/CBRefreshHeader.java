@@ -10,6 +10,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.zhl.CBPullRefresh.titanic.Titanic;
@@ -18,21 +19,19 @@ import com.zhl.CBPullRefresh.titanic.TitanicTextView;
 
 public class CBRefreshHeader extends CBRefreshHeaderView {
     private LinearLayout mContainer;
+    private RelativeLayout mHeaderViewContent;
     private ImageView mArrowImageView;
     private ProgressBar mProgressBar;
     private TextView mHintTextView;
-    private int mState = STATE_NORMAL;
-
+    private TextView mHeaderTimeView;
+    // 当前状态
+    private int mState = STATE_PULL_TO_REFRESH;
     private Animation mRotateUpAnim;
     private Animation mRotateDownAnim;
-
     private final int ROTATE_ANIM_DURATION = 200;
-
-    public final static int STATE_NORMAL = 0;
-    public final static int STATE_READY = 1;
-    public final static int STATE_REFRESHING = 2;
     private TitanicTextView headrAnimView;
     private Titanic titanic;
+
 
     public CBRefreshHeader(Context context) {
         super(context);
@@ -52,6 +51,8 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
         // 初始情况，设置下拉刷新view高度为0
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0);
         mContainer = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.cblistview_header, null);
+        mHeaderViewContent = (RelativeLayout) mContainer.findViewById(R.id.cbrefresh_header_content);
+        mHeaderTimeView = (TextView) mContainer.findViewById(R.id.cbrefresh_header_time);
         addView(mContainer, lp);
         setGravity(Gravity.BOTTOM);
 
@@ -68,45 +69,91 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
         mRotateDownAnim.setFillAfter(true);
     }
 
+    @Override
     public void setState(int state) {
         if (state == mState)
             return;
-
-        if (state == STATE_REFRESHING) { // 显示进度
-            mArrowImageView.clearAnimation();
-            mArrowImageView.setVisibility(View.INVISIBLE);
-            mProgressBar.setVisibility(View.VISIBLE);
-        } else { // 显示箭头图片
-            mArrowImageView.setVisibility(View.VISIBLE);
-            mProgressBar.setVisibility(View.INVISIBLE);
-        }
-
-        switch (state) {
-            case STATE_NORMAL:
-                if (mState == STATE_READY) {
-                    mArrowImageView.startAnimation(mRotateDownAnim);
-                }
-                if (mState == STATE_REFRESHING) {
-                    mArrowImageView.clearAnimation();
-                }
-                mHintTextView.setText("下拉刷新");
-                break;
-            case STATE_READY:
-                if (mState != STATE_READY) {
-                    mArrowImageView.clearAnimation();
-                    mArrowImageView.startAnimation(mRotateUpAnim);
-                    mHintTextView.setText("松开刷新数据");
-                }
-                break;
-            case STATE_REFRESHING:
-                mHintTextView.setText("正在加载...");
-                break;
-            default:
-        }
-
+//        if (state == STATE_REFRESHING) { // 显示进度
+//           onRefreshing();
+//        } else { // 显示箭头图片
+//            mArrowImageView.setVisibility(View.VISIBLE);
+//            mProgressBar.setVisibility(View.INVISIBLE);
+//        }
+//
+//        switch (state) {
+//            case STATE_PULL_TO_REFRESH:
+//                if (mState == STATE_RELEASE_TO_REFRESH) {
+//                    mArrowImageView.startAnimation(mRotateDownAnim);
+//                }
+//                if (mState == STATE_REFRESHING) {
+//                    mArrowImageView.clearAnimation();
+//                }
+//                mHintTextView.setText("下拉刷新");
+//                break;
+//            case STATE_RELEASE_TO_REFRESH:
+//                if (mState != STATE_RELEASE_TO_REFRESH) {
+//                    mArrowImageView.clearAnimation();
+//                    mArrowImageView.startAnimation(mRotateUpAnim);
+//                    mHintTextView.setText("松开刷新数据");
+//                }
+//                break;
+//            case STATE_REFRESHING:
+//                mHintTextView.setText("正在加载...");
+//                break;
+//            default:
+//        }
         mState = state;
     }
 
+
+    /**
+     * 设置顶部刷新图标
+     *
+     * @param resName
+     */
+    @Override
+    public void setHeaderIcon(int resName) {
+        mArrowImageView.setBackgroundResource(resName);
+    }
+
+
+    @Override
+    public void setHeaderAnimTextColor(int color) {
+        headrAnimView.setTextColor(color);
+    }
+
+
+    @Override
+    public void pullToRefresh() {
+        mHintTextView.setText(getString(R.string.refresh_header_tip_pull2refresh));
+        mArrowImageView.setVisibility(View.VISIBLE);
+        mProgressBar.setVisibility(View.INVISIBLE);
+        if (mState == STATE_RELEASE_TO_REFRESH) {
+            mArrowImageView.startAnimation(mRotateDownAnim);
+        }
+        if (mState == STATE_REFRESHING) {
+            mArrowImageView.clearAnimation();
+        }
+    }
+
+    @Override
+    public void releaseToRefresh() {
+        mHintTextView.setText(getString(R.string.refresh_header_tip_release2refresh));
+        if(mState != STATE_RELEASE_TO_REFRESH){
+            mArrowImageView.clearAnimation();
+            mArrowImageView.startAnimation(mRotateUpAnim);
+        }
+    }
+
+    @Override
+    public void onRefreshing() {
+        mHintTextView.setText(getString(R.string.refresh_header_tip_release2refresh));
+        mArrowImageView.clearAnimation();
+        mArrowImageView.setVisibility(View.INVISIBLE);
+        mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
     public void setVisiableHeight(int height) {
         if (height < 0)
             height = 0;
@@ -115,63 +162,31 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
         mContainer.setLayoutParams(lp);
     }
 
+    @Override
     public int getVisiableHeight() {
         return mContainer.getHeight();
     }
 
-    /**
-     * 设置顶部刷新图标
-     *
-     * @param resName
-     */
-    public void setHeaderRefreshIcon(int resName) {
-        mArrowImageView.setBackgroundResource(resName);
+    @Override
+    public int getRealHeaderContentHeight() {
+        // 因为container刚开始设置的高度为0所以这里要获取mHeaderViewContent的高度为真实高度
+        if(mHeaderViewContent!=null){
+            return mHeaderViewContent.getHeight();
+        }
+        return 0;
     }
 
     @Override
-    public void onAnimStart() {
-        headrAnimView.setVisibility(View.VISIBLE);
-        titanic.start(headrAnimView);
+    public void setPullRefreshEnable(boolean enable) {
+        if (!enable) { // disable, hide the content
+            mHeaderViewContent.setVisibility(View.INVISIBLE);
+        } else {
+            mHeaderViewContent.setVisibility(View.VISIBLE);
+        }
     }
 
     @Override
-    public void onAnimCancel() {
-        headrAnimView.setVisibility(View.GONE);
-        titanic.cancel();
-    }
-
-    @Override
-    public void setHeaderAnimTextColor(int color) {
-        headrAnimView.setTextColor(color);
-    }
-
-    @Override
-    public void setState() {
-
-    }
-
-    @Override
-    public void pullToRefresh() {
-
-    }
-
-    @Override
-    public void releaseToRefresh() {
-
-    }
-
-    @Override
-    public void setRefreshing() {
-
-    }
-
-    @Override
-    public void dropToLoadmore() {
-
-    }
-
-    @Override
-    public void releaseToLoadmore() {
-
+    public void setRefreshTime(String refreshTime) {
+        mHeaderTimeView.setText(refreshTime);
     }
 }

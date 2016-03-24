@@ -5,10 +5,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.zhl.CBPullRefresh.CBPullRefreshListView;
+import com.zhl.CBPullRefresh.CBRefreshHeader;
 
 import java.util.ArrayList;
 
@@ -27,10 +30,12 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         mListView = (CBPullRefreshListView) findViewById(R.id.listview);
+        mListView.setRefreshHeader(new CBRefreshHeader(this));
         mListView.setAdapter(mAdatper = new TestAdapter());
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadMoreEnable(true);
-        mListView.setMyListViewListener(new CBPullRefreshListView.MyListViewListener() {
+        mListView.showTobSearchBar(true);
+        mListView.setOnPullRefreshListener(new CBPullRefreshListView.OnPullRefreshListener() {
             @Override
             public void onRefresh() {
                 mListView.postDelayed(new Runnable() {
@@ -38,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         mListView.stopRefresh();
                     }
-                },5000);
+                }, 5000);
             }
 
             @Override
@@ -48,12 +53,18 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         mListView.stopLoadMore();
                     }
-                },5000);
+                }, 5000);
             }
 
             @Override
             public void setUpdateTime() {
 
+            }
+        });
+        mListView.setOnItemClickListener(new CBPullRefreshListView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(MainActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
             }
         });
     }
