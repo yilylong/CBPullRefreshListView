@@ -71,41 +71,8 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
 
     @Override
     public void setState(int state) {
-        if (state == mState)
-            return;
-//        if (state == STATE_REFRESHING) { // 显示进度
-//           onRefreshing();
-//        } else { // 显示箭头图片
-//            mArrowImageView.setVisibility(View.VISIBLE);
-//            mProgressBar.setVisibility(View.INVISIBLE);
-//        }
-//
-//        switch (state) {
-//            case STATE_PULL_TO_REFRESH:
-//                if (mState == STATE_RELEASE_TO_REFRESH) {
-//                    mArrowImageView.startAnimation(mRotateDownAnim);
-//                }
-//                if (mState == STATE_REFRESHING) {
-//                    mArrowImageView.clearAnimation();
-//                }
-//                mHintTextView.setText("下拉刷新");
-//                break;
-//            case STATE_RELEASE_TO_REFRESH:
-//                if (mState != STATE_RELEASE_TO_REFRESH) {
-//                    mArrowImageView.clearAnimation();
-//                    mArrowImageView.startAnimation(mRotateUpAnim);
-//                    mHintTextView.setText("松开刷新数据");
-//                }
-//                break;
-//            case STATE_REFRESHING:
-//                mHintTextView.setText("正在加载...");
-//                break;
-//            default:
-//        }
-        mState = state;
+        this.mState = state;
     }
-
-
     /**
      * 设置顶部刷新图标
      *
@@ -115,14 +82,10 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
     public void setHeaderIcon(int resName) {
         mArrowImageView.setBackgroundResource(resName);
     }
-
-
     @Override
     public void setHeaderAnimTextColor(int color) {
         headrAnimView.setTextColor(color);
     }
-
-
     @Override
     public void pullToRefresh() {
         mHintTextView.setText(getString(R.string.refresh_header_tip_pull2refresh));
@@ -147,10 +110,15 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
 
     @Override
     public void onRefreshing() {
-        mHintTextView.setText(getString(R.string.refresh_header_tip_release2refresh));
+        mHintTextView.setText(getString(R.string.refresh_header_tip_refreshing));
         mArrowImageView.clearAnimation();
         mArrowImageView.setVisibility(View.INVISIBLE);
         mProgressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onStyleChange(int state) {
+        super.onStyleChange(state);
     }
 
     @Override

@@ -173,7 +173,14 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
 
     }
 
+    @Override
+    public void onStyleChange(int state) {
+
+    }
+
     protected String getString(int redID){
        return context.getString(redID);
     }
+
+
 }

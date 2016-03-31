@@ -14,6 +14,7 @@ public class CBRefreshFooter extends CBRefreshHeaderView {
     private View mContentView;
     private View mProgressBar;
     private TextView mHintView;
+    private int state;
 
     public CBRefreshFooter(Context context) {
         super(context);
@@ -26,45 +27,9 @@ public class CBRefreshFooter extends CBRefreshHeaderView {
     }
 
     @Override
-    public void setHeaderAnimTextColor(int color) {
-
-    }
-
-    @Override
     public void setState(int state) {
-        //mHintView.setVisibility(View.INVISIBLE);
-//        mProgressBar.setVisibility(View.GONE);
-//        //mHintView.setVisibility(View.INVISIBLE);
-//        if (state == STATE_RELEASE_TO_LOADMORE) {
-//            mHintView.setVisibility(View.VISIBLE);
-//            mHintView.setText("松开载入更多");
-//        } else if (state == STATE_REFRESHING) {
-//            mProgressBar.setVisibility(View.VISIBLE);
-//            mHintView.setVisibility(View.VISIBLE);
-//            mHintView.setText("正在加载...");
-//        } else {
-//            mHintView.setVisibility(View.VISIBLE);
-//            mHintView.setText("加载更多");
-//        }
+        this.state = state;
     }
-
-
-    /**
-     * normal status
-     */
-    public void normal() {
-        mHintView.setVisibility(View.VISIBLE);
-        mProgressBar.setVisibility(View.GONE);
-    }
-
-    /**
-     * loading status
-     */
-    public void loading() {
-        mHintView.setVisibility(View.GONE);
-        mProgressBar.setVisibility(View.VISIBLE);
-    }
-
 
     private void initView(Context context) {
         mContext = context;
@@ -90,21 +55,21 @@ public class CBRefreshFooter extends CBRefreshHeaderView {
     public void pullUpToLoadmore() {
         mProgressBar.setVisibility(View.GONE);
         mHintView.setVisibility(View.VISIBLE);
-        mHintView.setText("加载更多");
+        mHintView.setText(getString(R.string.refresh_footer_tip_pullup_loadmore));
     }
 
     @Override
     public void releaseToLoadmore() {
         mProgressBar.setVisibility(View.GONE);
         mHintView.setVisibility(View.VISIBLE);
-        mHintView.setText("松开载入更多");
+        mHintView.setText(getString(R.string.refresh_footer_tip_release_loadmore));
     }
 
     @Override
     public void onLoading() {
         mProgressBar.setVisibility(View.VISIBLE);
         mHintView.setVisibility(View.VISIBLE);
-        mHintView.setText("正在加载...");
+        mHintView.setText(getString(R.string.refresh_footer_tip_loading));
     }
 
     @Override
@@ -115,6 +80,11 @@ public class CBRefreshFooter extends CBRefreshHeaderView {
     @Override
     public void onPullUp(int deltaY) {
 
+    }
+
+    @Override
+    public void onStyleChange(int state) {
+        super.onStyleChange(state);
     }
 
     @Override

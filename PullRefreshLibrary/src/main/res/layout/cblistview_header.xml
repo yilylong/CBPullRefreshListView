@@ -7,6 +7,7 @@
     <RelativeLayout
         android:id="@+id/cbrefresh_header_content"
         android:layout_width="fill_parent"
+        android:background="@color/top_refresh_bg"
         android:layout_height="80dp">
 
         <com.zhl.CBPullRefresh.titanic.TitanicTextView
@@ -39,8 +40,8 @@
                 android:layout_height="wrap_content"
                 android:text="下拉刷新"
                 android:textColor="#999999"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textSize="16sp"
+                android:textStyle="normal" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -52,6 +53,7 @@
                     android:layout_height="wrap_content"
                     android:text="更新于："
                     android:textColor="#999999"
+                    android:textStyle="italic"
                     android:textSize="15sp" />
 
                 <TextView
@@ -70,7 +72,7 @@
             android:layout_alignLeft="@id/cbrefresh_header_text"
             android:layout_centerVertical="true"
             android:layout_marginLeft="-35dp"
-            android:src="@drawable/skin_mylistview_arrow" />
+            android:src="@drawable/top_pull_refresh_arrow" />
 
         <ProgressBar
             android:id="@+id/cbrefresh_header_progressbar"

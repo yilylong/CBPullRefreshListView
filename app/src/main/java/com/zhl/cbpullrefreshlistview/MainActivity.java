@@ -11,7 +11,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhl.CBPullRefresh.CBPullRefreshListView;
-import com.zhl.CBPullRefresh.CBRefreshHeader;
 
 import java.util.ArrayList;
 
@@ -30,11 +29,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void initView() {
         mListView = (CBPullRefreshListView) findViewById(R.id.listview);
-        mListView.setRefreshHeader(new CBRefreshHeader(this));
+//        mListView.setRefreshHeader(new CBRefreshHeader(this));
         mListView.setAdapter(mAdatper = new TestAdapter());
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadMoreEnable(true);
-        mListView.showTobSearchBar(true);
+//        mListView.showTobSearchBar(true);
         mListView.setOnPullRefreshListener(new CBPullRefreshListView.OnPullRefreshListener() {
             @Override
             public void onRefresh() {
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         mListView.stopRefresh();
                     }
-                }, 5000);
+                }, 3000);
             }
 
             @Override
@@ -53,13 +52,14 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         mListView.stopLoadMore();
                     }
-                }, 5000);
+                }, 3000);
             }
 
             @Override
-            public void setUpdateTime() {
+            public void onUpdateRefreshTime(long time) {
 
             }
+
         });
         mListView.setOnItemClickListener(new CBPullRefreshListView.OnItemClickListener() {
             @Override
