@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
+import com.zhl.CBPullRefresh.CBPullRefreshListView;
+
 public class SwipeMenuAdapter implements WrapperListAdapter, SwipeMenuView.OnSwipeItemClickListener {
 	
 	private ListAdapter mAdapter;
@@ -43,11 +45,11 @@ public class SwipeMenuAdapter implements WrapperListAdapter, SwipeMenuView.OnSwi
 			SwipeMenu menu = new SwipeMenu(mContext);
 			menu.setViewType(mAdapter.getItemViewType(position));
 			createMenu(menu);
-			SwipeMenuView menuView = new SwipeMenuView(menu, (PullToRefreshSwipeMenuListView) parent);
+			SwipeMenuView menuView = new SwipeMenuView(menu, (CBPullRefreshListView) parent);
 			menuView.setOnSwipeItemClickListener(this);
-			PullToRefreshSwipeMenuListView listView = (PullToRefreshSwipeMenuListView) parent;
-			layout = new SwipeMenuLayout(contentView, menuView, listView.getCloseInterpolator(),
-					listView.getOpenInterpolator());
+			CBPullRefreshListView listView = (CBPullRefreshListView) parent;
+			layout = new SwipeMenuLayout(contentView, menuView, null,
+					null);
 			layout.setPosition(position);
 		} else {
 			layout = (SwipeMenuLayout) convertView;

@@ -8,11 +8,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.zhl.CBPullRefresh.CBPullRefreshListView;
+
 import java.util.List;
 
 public class SwipeMenuView extends LinearLayout implements OnClickListener {
 
-    private PullToRefreshSwipeMenuListView mListView;
+    private CBPullRefreshListView mListView;
     private SwipeMenuLayout mLayout;
     private SwipeMenu mMenu;
     private OnSwipeItemClickListener onItemClickListener;
@@ -26,7 +28,7 @@ public class SwipeMenuView extends LinearLayout implements OnClickListener {
         this.position = position;
     }
 
-    public SwipeMenuView(SwipeMenu menu, PullToRefreshSwipeMenuListView listView) {
+    public SwipeMenuView(SwipeMenu menu, CBPullRefreshListView listView) {
         super(menu.getContext());
         mListView = listView;
         mMenu = menu;

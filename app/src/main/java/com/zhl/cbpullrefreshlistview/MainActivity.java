@@ -1,7 +1,10 @@
 package com.zhl.cbpullrefreshlistview;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.zhl.CBPullRefresh.CBPullRefreshListView;
+import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenu;
+import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuCreator;
+import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuItem;
 
 import java.util.ArrayList;
 
@@ -60,6 +66,38 @@ public class MainActivity extends AppCompatActivity {
 
             }
 
+        });
+        SwipeMenuCreator creator = new SwipeMenuCreator() {
+
+            @Override
+            public void create(SwipeMenu menu) {
+
+                SwipeMenuItem collectionItem = new SwipeMenuItem(getApplicationContext());
+                collectionItem.setBackground(R.color.green);
+                collectionItem.setWidth(dp2px(MainActivity.this, 90));
+                collectionItem.setTitle("收藏");
+                collectionItem.setTitleSize(18);
+                collectionItem.setTitleColor(Color.WHITE);
+                collectionItem.setIcon(R.drawable.ic_collection);
+                menu.addMenuItem(collectionItem);
+
+                SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
+                deleteItem.setBackground(R.color.red);
+                deleteItem.setWidth(dp2px(MainActivity.this, 90));
+                deleteItem.setTitle("删除");
+                deleteItem.setIcon(R.drawable.ic_delete);
+                deleteItem.setTitleSize(18);
+                deleteItem.setTitleColor(Color.WHITE);
+                menu.addMenuItem(deleteItem);
+            }
+        };
+        // set creator
+        mListView.setMenuCreator(creator);
+        mListView.setOnMenuItemClickListener(new CBPullRefreshListView.OnMenuItemClickListener() {
+            @Override
+            public void onMenuItemClick(int position, SwipeMenu menu, int index) {
+                Toast.makeText(MainActivity.this, "点击了item swipe 菜单的第" + index, Toast.LENGTH_SHORT).show();
+            }
         });
         mListView.setOnItemClickListener(new CBPullRefreshListView.OnItemClickListener() {
             @Override
@@ -120,4 +158,7 @@ public class MainActivity extends AppCompatActivity {
         TextView title;
     }
 
+    public int dp2px(Context context,int dp) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, context.getResources().getDisplayMetrics());
+    }
 }

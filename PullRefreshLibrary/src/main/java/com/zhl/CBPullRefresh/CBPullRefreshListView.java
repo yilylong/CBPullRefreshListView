@@ -8,6 +8,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
@@ -15,6 +16,11 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Scroller;
 
+import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenu;
+import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuAdapter;
+import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuCreator;
+import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuLayout;
+import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuView;
 import com.zhl.CBPullRefresh.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -22,6 +28,9 @@ import java.util.Date;
 
 
 public class CBPullRefreshListView extends ListView implements OnScrollListener {
+	private static final int TOUCH_STATE_NONE = 0;
+	private static final int TOUCH_STATE_X = 1;
+	private static final int TOUCH_STATE_Y = 2;
 	private float mLastY = -1; // save event y
 	private Scroller mScroller; // used for scroll back
 	private OnScrollListener mScrollListener; // user's scroll listener
@@ -53,8 +62,23 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private CBRefreshHeaderView topSearchView;
 	private int topSearchBarHeight=0;
 	private OnSearchClickListener searchClickListener;
+	private OnMenuItemClickListener mMenuItemClickListener;
+	private SwipeMenuLayout mTouchView;
 	private long refreshTime;
 	private boolean swipeEnable;
+	private SwipeMenuCreator mMenuCreator;
+	private Interpolator mSwipeInterpolator;
+	/**
+	 * 当前点击位置所在的item position
+	 */
+	private int mTouchPosition;
+	private int mTouchState;
+	private float mDownX;
+	private float mDownY;
+	private int MAX_Y = 5;
+	private int MAX_X = 3;
+	private OnSwipeListener mOnSwipeListener;
+
 	/**
 	 * @param context
 	 */
@@ -147,7 +171,25 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		}
 		setHeaderDividersEnabled(false);
 		setRefreshTime(null);
-		super.setAdapter(adapter);
+//		super.setAdapter(adapter);
+		super.setAdapter(new SwipeMenuAdapter(getContext(), adapter) {
+			@Override
+			public void createMenu(SwipeMenu menu) {
+				if (mMenuCreator != null) {
+					mMenuCreator.create(menu);
+				}
+			}
+
+			@Override
+			public void onItemClick(SwipeMenuView view, SwipeMenu menu, int index) {
+				if (mMenuItemClickListener != null) {
+					mMenuItemClickListener.onMenuItemClick(view.getPosition(), menu, index);
+				}
+				if (mTouchView != null) {
+					mTouchView.smoothCloseMenu();
+				}
+			}
+		});
 	}
 
 	/**
@@ -337,25 +379,74 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		switch (ev.getAction()) {
 		case MotionEvent.ACTION_DOWN:
 			mLastY = ev.getRawY();
+			int oldPos = mTouchPosition;
+			mDownX = ev.getX();
+			mDownY = ev.getY();
+			mTouchState = TOUCH_STATE_NONE;
+
+			mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
+
+			if (mTouchPosition == oldPos && mTouchView != null && mTouchView.isOpen()) {
+				mTouchState = TOUCH_STATE_X;
+				mTouchView.onSwipe(ev);
+				return true;
+			}
+
+			View view = getChildAt(mTouchPosition - getFirstVisiblePosition());
+
+			if (mTouchView != null && mTouchView.isOpen()) {
+				mTouchView.smoothCloseMenu();
+				mTouchView = null;
+				return super.onTouchEvent(ev);
+			}
+			if (view instanceof SwipeMenuLayout) {
+				mTouchView = (SwipeMenuLayout) view;
+			}
+			if (mTouchView != null) {
+				mTouchView.onSwipe(ev);
+			}
 			break;
 		case MotionEvent.ACTION_MOVE:
 			final float deltaY = ev.getRawY() - mLastY;
 			mLastY = ev.getRawY();
-			// 下拉
-			if (getFirstVisiblePosition() == 0 && (mHeaderView.getVisiableHeight() > 0 || deltaY > 0)) {
-				// the first item is showing, header has shown or pull down.
-				if(showTopSearchBar&&topSearchView.getVisiableHeight()<topSearchBarHeight){
-					updateTopSearchBarHeight(deltaY);
-				}else{
-					updateHeaderHeight(deltaY / OFFSET_RADIO);
-					mHeaderView.onPullDown((int) Math.abs(deltaY / OFFSET_RADIO));
-					invokeOnScrolling();
+			float dy = Math.abs((ev.getY() - mDownY));
+			float dx = Math.abs((ev.getX() - mDownX));
+			// 上下拖动
+			if((mTouchView == null || !mTouchView.isActive()) && dx<dy){
+				if (getFirstVisiblePosition() == 0 && (mHeaderView.getVisiableHeight() > 0 || deltaY > 0)) {
+					// the first item is showing, header has shown or pull down.
+					if(showTopSearchBar&&topSearchView.getVisiableHeight()<topSearchBarHeight){
+						updateTopSearchBarHeight(deltaY);
+					}else{
+						updateHeaderHeight(deltaY / OFFSET_RADIO);
+						mHeaderView.onPullDown((int) Math.abs(deltaY / OFFSET_RADIO));
+						invokeOnScrolling();
+					}
+
+				} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getLoadMorePullUpDistance() > 0 || deltaY < 0)) {// 上拉
+					// last item, already pulled up or want to pull up.
+					updateFooterHeight(-deltaY / OFFSET_RADIO);
+					mFooterView.onPullUp((int) (-deltaY / OFFSET_RADIO));
 				}
-				
-			} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getLoadMorePullUpDistance() > 0 || deltaY < 0)) {// 上拉
-				// last item, already pulled up or want to pull up.
-				updateFooterHeight(-deltaY / OFFSET_RADIO);
-				mFooterView.onPullUp((int) (-deltaY / OFFSET_RADIO));
+			}
+			// 左右拖动
+			if (mTouchState == TOUCH_STATE_X) {
+				if (mTouchView != null) {
+					mTouchView.onSwipe(ev);
+				}
+				getSelector().setState(new int[]{0});
+				ev.setAction(MotionEvent.ACTION_CANCEL);
+				super.onTouchEvent(ev);
+				return true;
+			} else if (mTouchState == TOUCH_STATE_NONE) {
+				if (Math.abs(dy) > MAX_Y) {
+					mTouchState = TOUCH_STATE_Y;
+				} else if (dx > MAX_X) {
+					mTouchState = TOUCH_STATE_X;
+					if (mOnSwipeListener != null) {
+						mOnSwipeListener.onSwipeStart(mTouchPosition);
+					}
+				}
 			}
 			break;
 		default:
@@ -381,6 +472,22 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 				resetFooterHeight();
 			}else{
 				resetTopSearchBarHeight();
+			}
+
+			if (mTouchState == TOUCH_STATE_X) {
+				if (mTouchView != null) {
+					mTouchView.onSwipe(ev);
+					if (!mTouchView.isOpen()) {
+						mTouchPosition = -1;
+						mTouchView = null;
+					}
+				}
+				if (mOnSwipeListener != null) {
+					mOnSwipeListener.onSwipeEnd(mTouchPosition);
+				}
+				ev.setAction(MotionEvent.ACTION_CANCEL);
+				super.onTouchEvent(ev);
+				return true;
 			}
 			break;
 		}
@@ -534,6 +641,16 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		initTopsearchViewHeight();
 	}
 
+	public void setMenuCreator(SwipeMenuCreator menuCreator) {
+		this.mMenuCreator = menuCreator;
+	}
+	public void setSwipeMenuInterpolator(Interpolator interpolator){
+		this.mSwipeInterpolator = interpolator;
+	}
+
+	public void setOnMenuItemClickListener(OnMenuItemClickListener itemClickListener){
+		this.mMenuItemClickListener = itemClickListener;
+	}
 	/**
 	 * 下拉刷新的回调接口
 	 */
@@ -549,5 +666,12 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 	public interface OnSearchClickListener{
 		public void onSearchBarClick();
+	}
+	public static interface OnMenuItemClickListener {
+		void onMenuItemClick(int position, SwipeMenu menu, int index);
+	}
+	public static interface OnSwipeListener {
+		void onSwipeStart(int position);
+		void onSwipeEnd(int position);
 	}
 }
