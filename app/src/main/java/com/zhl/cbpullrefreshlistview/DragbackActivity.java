@@ -1,13 +1,10 @@
 package com.zhl.cbpullrefreshlistview;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.util.TypedValue;
 import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -22,7 +19,11 @@ import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * 描述：
+ * Created by zhaohl on 2016-4-5.
+ */
+public class DragbackActivity extends BaseActivity {
     private TestAdapter mAdatper;
     private ArrayList<String> DataList = new ArrayList<String>();
     private CBPullRefreshListView mListView;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
                 SwipeMenuItem collectionItem = new SwipeMenuItem(getApplicationContext());
                 collectionItem.setBackground(R.color.green);
-                collectionItem.setWidth(dp2px(MainActivity.this, 90));
+                collectionItem.setWidth(dp2px(DragbackActivity.this, 90));
                 collectionItem.setTitle("收藏");
                 collectionItem.setTitleSize(18);
                 collectionItem.setTitleColor(Color.WHITE);
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 
                 SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
                 deleteItem.setBackground(R.color.red);
-                deleteItem.setWidth(dp2px(MainActivity.this, 90));
+                deleteItem.setWidth(dp2px(DragbackActivity.this, 90));
                 deleteItem.setTitle("删除");
                 deleteItem.setIcon(R.drawable.ic_delete);
                 deleteItem.setTitleSize(18);
@@ -98,13 +99,13 @@ public class MainActivity extends AppCompatActivity {
         mListView.setOnMenuItemClickListener(new CBPullRefreshListView.OnMenuItemClickListener() {
             @Override
             public void onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Toast.makeText(MainActivity.this, "点击了item swipe 菜单的第" + index, Toast.LENGTH_SHORT).show();
+                Toast.makeText(DragbackActivity.this, "点击了item swipe 菜单的第" + index, Toast.LENGTH_SHORT).show();
             }
         });
         mListView.setOnItemClickListener(new CBPullRefreshListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(DragbackActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -120,17 +121,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.action_settings:
-                Intent intent = new Intent(this,DragbackActivity.class);
-                startActivity(intent);
-                break;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     class TestAdapter extends BaseAdapter {

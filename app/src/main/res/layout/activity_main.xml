@@ -3,6 +3,7 @@
     xmlns:zhl="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e4e4e4"
     tools:context=".MainActivity">
 
     <com.zhl.CBPullRefresh.CBPullRefreshListView
