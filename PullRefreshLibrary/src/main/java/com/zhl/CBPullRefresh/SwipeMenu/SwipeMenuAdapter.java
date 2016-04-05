@@ -15,7 +15,7 @@ public class SwipeMenuAdapter implements WrapperListAdapter, SwipeMenuView.OnSwi
 	
 	private ListAdapter mAdapter;
 	private Context mContext;
-	private PullToRefreshSwipeMenuListView.OnMenuItemClickListener onMenuItemClickListener;
+	private CBPullRefreshListView.OnMenuItemClickListener onMenuItemClickListener;
 
 	public SwipeMenuAdapter(Context context, ListAdapter adapter) {
 		mAdapter = adapter;
@@ -45,9 +45,9 @@ public class SwipeMenuAdapter implements WrapperListAdapter, SwipeMenuView.OnSwi
 			SwipeMenu menu = new SwipeMenu(mContext);
 			menu.setViewType(mAdapter.getItemViewType(position));
 			createMenu(menu);
-			SwipeMenuView menuView = new SwipeMenuView(menu, (CBPullRefreshListView) parent);
+			SwipeMenuView menuView = new SwipeMenuView(menu);
 			menuView.setOnSwipeItemClickListener(this);
-			CBPullRefreshListView listView = (CBPullRefreshListView) parent;
+//			CBPullRefreshListView listView = (CBPullRefreshListView) parent;
 			layout = new SwipeMenuLayout(contentView, menuView, null,
 					null);
 			layout.setPosition(position);
@@ -55,7 +55,7 @@ public class SwipeMenuAdapter implements WrapperListAdapter, SwipeMenuView.OnSwi
 			layout = (SwipeMenuLayout) convertView;
 			layout.closeMenu();
 			layout.setPosition(position);
-			mAdapter.getView(position, layout.getContentView(), parent);
+//			mAdapter.getView(position, layout.getContentView(), parent);
 		}
 		return layout;
 	}
@@ -82,7 +82,7 @@ public class SwipeMenuAdapter implements WrapperListAdapter, SwipeMenuView.OnSwi
 		}
 	}
 
-	public void setOnMenuItemClickListener(PullToRefreshSwipeMenuListView.OnMenuItemClickListener onMenuItemClickListener) {
+	public void setOnMenuItemClickListener(CBPullRefreshListView.OnMenuItemClickListener onMenuItemClickListener) {
 		this.onMenuItemClickListener = onMenuItemClickListener;
 	}
 
