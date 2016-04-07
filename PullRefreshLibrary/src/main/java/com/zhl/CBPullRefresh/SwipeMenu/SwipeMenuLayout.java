@@ -109,7 +109,7 @@ public class SwipeMenuLayout extends FrameLayout {
         }
 
         mMenuView.setId(MENU_VIEW_ID);
-        mMenuView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+        mMenuView.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT));
 
         addView(mContentView);
         addView(mMenuView);
@@ -180,7 +180,7 @@ public class SwipeMenuLayout extends FrameLayout {
         }
         mContentView.layout(-dis, mContentView.getTop(), mContentView.getWidth() - dis, getMeasuredHeight());
         mMenuView.layout(mContentView.getWidth() - dis, mMenuView.getTop(),
-                mContentView.getWidth() + mMenuView.getWidth() - dis, mMenuView.getBottom());
+                mContentView.getWidth() + mMenuView.getWidth() - dis, getMeasuredHeight());
     }
 
     @Override
@@ -250,9 +250,9 @@ public class SwipeMenuLayout extends FrameLayout {
 
     @Override
     protected void onLayout(boolean changed, int l, int t, int r, int b) {
-        mContentView.layout(0, 0, getMeasuredWidth(), mContentView.getMeasuredHeight());
+        mContentView.layout(0, 0, getMeasuredWidth(), getMeasuredHeight());
         mMenuView.layout(getMeasuredWidth(), 0, getMeasuredWidth() + mMenuView.getMeasuredWidth(),
-                mContentView.getMeasuredHeight());
+                getMeasuredHeight());
     }
 
     public void setMenuHeight(int measuredHeight) {

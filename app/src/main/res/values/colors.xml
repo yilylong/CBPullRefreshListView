@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="red">#f65c4f</color>
+    <color name="red">#4ea6ed</color>
     <color name="item_menu_bg">#e8e8e8</color>
     <color name="swipe_back_shadow">#33000001</color>
     <color name="color_transparent">#00000000</color>
+    <color name="green">#19BF80</color>
+    <color name="white">#ffffff</color>
 
 </resources>

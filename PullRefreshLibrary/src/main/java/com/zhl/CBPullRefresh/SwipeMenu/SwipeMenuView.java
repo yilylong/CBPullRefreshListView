@@ -45,15 +45,13 @@ public class SwipeMenuView extends LinearLayout implements OnClickListener {
         parent.setLayoutParams(params);
         parent.setBackgroundDrawable(item.getBackground());
         parent.setOnClickListener(this);
-        addView(parent);
-
         if (item.getIcon() != null) {
             parent.addView(createIcon(item));
         }
         if (!TextUtils.isEmpty(item.getTitle())) {
             parent.addView(createTitle(item));
         }
-
+        addView(parent);
     }
 
     private ImageView createIcon(SwipeMenuItem item) {

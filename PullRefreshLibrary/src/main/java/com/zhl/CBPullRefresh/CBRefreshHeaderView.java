@@ -20,10 +20,6 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
         this.context = context;
     }
 
-    public void setHeaderAnimTextColor(int color){
-
-    };
-
     /**
      * 设置当前状态
      * @param state
@@ -98,19 +94,11 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * 正在下拉
+     * 正在拖动
      * @param deltaY
      */
     @Override
-    public void onPullDown(int deltaY) {
-
-    }
-    /**
-     * 正在上拉
-     * @param deltaY
-     */
-    @Override
-    public void onPullUp(int deltaY) {
+    public void onDragSlide(float deltaY) {
 
     }
     /**

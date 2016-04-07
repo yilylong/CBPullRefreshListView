@@ -73,16 +73,6 @@ public class CBRefreshFooter extends CBRefreshHeaderView {
     }
 
     @Override
-    public void onPullDown(int deltaY) {
-
-    }
-
-    @Override
-    public void onPullUp(int deltaY) {
-
-    }
-
-    @Override
     public void onStyleChange(int state) {
         super.onStyleChange(state);
     }

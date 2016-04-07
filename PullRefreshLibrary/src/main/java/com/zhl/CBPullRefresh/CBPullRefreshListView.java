@@ -138,9 +138,9 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			@Override
 			public void onGlobalLayout() {
 				topSearchBarHeight = topSearchView.getRealHeaderContentHeight();
-				if(Build.VERSION.SDK_INT>=Build.VERSION_CODES.JELLY_BEAN){
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 					getViewTreeObserver().removeOnGlobalLayoutListener(this);
-				}else{
+				} else {
 					getViewTreeObserver().removeGlobalOnLayoutListener(this);
 				}
 			}
@@ -246,6 +246,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			mPullRefreshing = false;
 			resetHeaderHeight();
 			resetTopSearchBarHeight();
+			mHeaderView.setState(CBRefreshState.STATE_PULL_TO_REFRESH);
 		}
 	}
 	
@@ -394,7 +395,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 			View view = getChildAt(mTouchPosition - getFirstVisiblePosition());
 
-			if (mTouchView != null && mTouchView.isOpen()) {
+			if ((mTouchView != null && mTouchView.isOpen())||(mTouchView != null && mTouchView.isActive())) {
 				mTouchView.smoothCloseMenu();
 				mTouchView = null;
 				return super.onTouchEvent(ev);
@@ -419,14 +420,14 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 						updateTopSearchBarHeight(deltaY);
 					}else{
 						updateHeaderHeight(deltaY / OFFSET_RADIO);
-						mHeaderView.onPullDown((int) Math.abs(deltaY / OFFSET_RADIO));
+						mHeaderView.onDragSlide((float)mHeaderView.getVisiableHeight()+Math.abs(deltaY / OFFSET_RADIO));
 						invokeOnScrolling();
 					}
 
 				} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getLoadMorePullUpDistance() > 0 || deltaY < 0)) {// 上拉
 					// last item, already pulled up or want to pull up.
 					updateFooterHeight(-deltaY / OFFSET_RADIO);
-					mFooterView.onPullUp((int) (-deltaY / OFFSET_RADIO));
+					mFooterView.onDragSlide((float)mFooterView.getLoadMorePullUpDistance()+(-deltaY / OFFSET_RADIO));
 				}
 			}
 			// 左右拖动
@@ -517,8 +518,10 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		if (mScroller.computeScrollOffset()) {
 			if (mScrollBack == SCROLLBACK_HEADER) {
 				mHeaderView.setVisiableHeight(mScroller.getCurrY());
+				mHeaderView.onDragSlide(mScroller.getCurrY());
 			} else {
 				mFooterView.setLoadMorePullUpDistance(mScroller.getCurrY());
+				mFooterView.onDragSlide(mScroller.getCurrY());
 			}
 			postInvalidate();
 			invokeOnScrolling();
@@ -613,7 +616,9 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			return;
 		}
 		removeHeaderView(mHeaderView);
+		headersCount--;
 		removeHeaderView(topSearchView);
+		headersCount--;
 		mHeaderView = header;
 		addHeaderView(mHeaderView);
 		addHeaderView(topSearchView);
@@ -636,9 +641,26 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			return;
 		}
 		this.removeFooterView(topSearchView);
+		headersCount--;
 		this.topSearchView = searchBar;
 		addHeaderView(topSearchView);
 		initTopsearchViewHeight();
+	}
+
+	/**
+	 * 返回当前触摸的item view
+	 * @return
+	 */
+	public SwipeMenuLayout getTouchView(){
+		return mTouchView;
+	}
+
+	/**
+	 * item侧滑按钮是否打开 可以用来做事件冲突的判断
+	 * @return
+	 */
+	public boolean isSwipeMenuOpen(){
+		return mTouchView==null?false:mTouchView.isOpen()||mTouchView.isActive();
 	}
 
 	public void setMenuCreator(SwipeMenuCreator menuCreator) {

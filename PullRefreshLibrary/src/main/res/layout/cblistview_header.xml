@@ -7,7 +7,6 @@
     <RelativeLayout
         android:id="@+id/cbrefresh_header_content"
         android:layout_width="fill_parent"
-        android:background="@color/top_refresh_bg"
         android:layout_height="80dp">
 
         <com.zhl.CBPullRefresh.titanic.TitanicTextView

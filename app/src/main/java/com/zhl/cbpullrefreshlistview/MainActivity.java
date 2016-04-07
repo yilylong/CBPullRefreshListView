@@ -80,14 +80,14 @@ public class MainActivity extends AppCompatActivity {
                 collectionItem.setTitle("收藏");
                 collectionItem.setTitleSize(18);
                 collectionItem.setTitleColor(Color.WHITE);
-                collectionItem.setIcon(R.drawable.ic_collection);
+                collectionItem.setIcon(R.drawable.icon_collection);
                 menu.addMenuItem(collectionItem);
 
                 SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
                 deleteItem.setBackground(R.color.red);
                 deleteItem.setWidth(dp2px(MainActivity.this, 90));
                 deleteItem.setTitle("删除");
-                deleteItem.setIcon(R.drawable.ic_delete);
+                deleteItem.setIcon(R.drawable.icon_delete);
                 deleteItem.setTitleSize(18);
                 deleteItem.setTitleColor(Color.WHITE);
                 menu.addMenuItem(deleteItem);
@@ -128,6 +128,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Intent intent = new Intent(this,DragbackActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.action_custom_header:
+                Intent intent2 = new Intent(this,CustomRefreshHeaderActivity.class);
+                startActivity(intent2);
                 break;
         }
         return super.onOptionsItemSelected(item);

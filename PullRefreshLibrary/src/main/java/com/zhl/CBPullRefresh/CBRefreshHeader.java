@@ -34,8 +34,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
 
 
     public CBRefreshHeader(Context context) {
-        super(context);
-        initView(context);
+        this(context, null);
     }
 
     /**
@@ -82,10 +81,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
     public void setHeaderIcon(int resName) {
         mArrowImageView.setBackgroundResource(resName);
     }
-    @Override
-    public void setHeaderAnimTextColor(int color) {
-        headrAnimView.setTextColor(color);
-    }
+
     @Override
     public void pullToRefresh() {
         mHintTextView.setText(getString(R.string.refresh_header_tip_pull2refresh));
