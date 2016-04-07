@@ -1,1 +1,1 @@
-include ':app', ':PullRefreshLibrary'
+include ':app', ':CBPullRefreshLibrary'
