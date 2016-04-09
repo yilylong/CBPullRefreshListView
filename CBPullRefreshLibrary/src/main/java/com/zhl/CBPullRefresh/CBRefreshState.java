@@ -1,43 +1,39 @@
 package com.zhl.CBPullRefresh;
 
 /**
- * 描述：刷新状态的接口
+ * 鎻忚堪锛氬埛鏂扮姸鎬佺殑鎺ュ彛
  * Created by zhaohl on 2016-3-22.
  */
 public interface CBRefreshState {
     /**
-     * 下拉刷新
+     * state pull to refresh
      */
     public final static int STATE_PULL_TO_REFRESH = 0;
     /**
-     * 释放刷新
+     * state relase to refresh
      */
     public final static int STATE_RELEASE_TO_REFRESH = 1;
     /**
-     * 正在刷新
+     * state on refreshing
      */
     public final static int STATE_REFRESHING = 2;
     /**
-     * 上拉加载
+     * state pull to loadmore
      */
     public final static int STATE_PULL_UP_TO_LOADMORE = 3;
     /**
-     * 释放加载更多
+     * state relase to loadmore
      */
     public final static int STATE_RELEASE_TO_LOADMORE = 4;
 
     /**
-     * 设置状态
+     * set the state
      */
     public void setState(int state);
-
     public void pullToRefresh();
 
     public void releaseToRefresh();
 
-    /**
-     * 上拉加载更多
-     */
     public void pullUpToLoadmore();
 
     public void releaseToLoadmore();
@@ -52,16 +48,8 @@ public interface CBRefreshState {
 
     public void onDragSlide(float deltaY);
 
-    /**
-     * 上拉距离
-     * @return
-     */
     public int getLoadMorePullUpDistance();
 
-    /**
-     * 设置下拉距离
-     * @return
-     */
     public void setLoadMorePullUpDistance(int deltaY);
 
     public void footerViewShow();

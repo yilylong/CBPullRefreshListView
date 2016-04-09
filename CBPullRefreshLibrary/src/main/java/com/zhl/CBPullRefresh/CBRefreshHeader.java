@@ -24,7 +24,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
     private ProgressBar mProgressBar;
     private TextView mHintTextView;
     private TextView mHeaderTimeView;
-    // 当前状态
+    // the curent state
     private int mState = STATE_PULL_TO_REFRESH;
     private Animation mRotateUpAnim;
     private Animation mRotateDownAnim;
@@ -47,8 +47,8 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
     }
 
     private void initView(Context context) {
-        // 初始情况，设置下拉刷新view高度为0
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0);
+        // in the first set the Header height=0
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, 0);
         mContainer = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.cblistview_header, null);
         mHeaderViewContent = (RelativeLayout) mContainer.findViewById(R.id.cbrefresh_header_content);
         mHeaderTimeView = (TextView) mContainer.findViewById(R.id.cbrefresh_header_time);
@@ -73,8 +73,6 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
         this.mState = state;
     }
     /**
-     * 设置顶部刷新图标
-     *
      * @param resName
      */
     @Override
@@ -121,7 +119,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
     public void setVisiableHeight(int height) {
         if (height < 0)
             height = 0;
-        LinearLayout.LayoutParams lp = (LinearLayout.LayoutParams) mContainer.getLayoutParams();
+        LayoutParams lp = (LayoutParams) mContainer.getLayoutParams();
         lp.height = height;
         mContainer.setLayoutParams(lp);
     }
@@ -133,7 +131,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
 
     @Override
     public int getRealHeaderContentHeight() {
-        // 因为container刚开始设置的高度为0所以这里要获取mHeaderViewContent的高度为真实高度
+        // beacuse container height =0 at the first ,so return mHeaderViewContent height
         if(mHeaderViewContent!=null){
             return mHeaderViewContent.getHeight();
         }

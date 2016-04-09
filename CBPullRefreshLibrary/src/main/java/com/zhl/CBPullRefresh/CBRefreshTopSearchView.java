@@ -26,7 +26,7 @@ public class CBRefreshTopSearchView extends CBRefreshHeaderView {
 	}
 
 	private void initView(Context context) {
-		// 初始情况，设置view高度为0
+		// in the first set the header's height = 0
 		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, 0);
 		container = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.cbpullrefrsh_topsearch, null);
 		searchImg = (ImageView) container.findViewById(R.id.pull2reresh_top_search);

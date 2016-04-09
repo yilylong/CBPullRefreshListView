@@ -46,7 +46,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	private boolean mPullRefreshing = false; // is refreashing.
 	private boolean mEnablePullLoad;
-	private boolean mPullLoading;// 正在上拉
+	private boolean mPullLoading;// isLoading
 	private boolean mIsFooterReady = false;
 	// total list items, used to detect is at the bottom of listview.
 	private int mTotalItemCount = 0;
@@ -68,9 +68,6 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private boolean swipeEnable;
 	private SwipeMenuCreator mMenuCreator;
 	private Interpolator mSwipeInterpolator;
-	/**
-	 * 当前点击位置所在的item position
-	 */
 	private int mTouchPosition;
 	private int mTouchState;
 	private float mDownX;
@@ -78,7 +75,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private int MAX_Y = 5;
 	private int MAX_X = 3;
 	private OnSwipeListener mOnSwipeListener;
-
+	private Context context;
 	/**
 	 * @param context
 	 */
@@ -98,6 +95,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	private void initWithContext(Context context) {
+		this.context = context;
 		mScroller = new Scroller(context, new DecelerateInterpolator());
 		super.setOnScrollListener(this);
 		// init header view
@@ -123,7 +121,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		mFooterView = new CBRefreshFooter(context);
 		mFooterView.footerViewHide();
 		mFooterView.setOnClickListener(null);
-		// headerview 和footer 与内容之间无分割线
+		// headerview and footer divider
 		setHeaderDividersEnabled(false);
 	}
 
@@ -163,7 +161,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	@Override
 	public void setAdapter(ListAdapter adapter) {
-		// 确保加载更多的布局是最后一个并且只加载一次
+		// ensure footer view is the last child view
 		if (mIsFooterReady == false) {
 			mIsFooterReady = true;
 			addFooterView(mFooterView);
@@ -231,7 +229,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	/**
-	 * 设置item Swipe是否可用
+	 * set Swipe enable
 	 * @param swipeEnable
 	 */
 	public void setSwipeEnable(boolean swipeEnable){
@@ -279,7 +277,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	/**
-	 * 设置刷新时间
+	 * set refreshTIme
 	 * @param time
 	 */
 	public void setRefreshTime(long time){
@@ -287,7 +285,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			setRefreshTime(null);
 		}else{
 			refreshTime = time;
-			setRefreshTime(Utils.getTimeDifferent(time));
+			setRefreshTime(Utils.getTimeDifferent(context,time));
 		}
 	}
 
@@ -300,7 +298,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	private void updateHeaderHeight(float delta) {
 		mHeaderView.setVisiableHeight((int) delta + mHeaderView.getVisiableHeight());
-		if (mEnablePullRefresh && !mPullRefreshing) { // 未处于刷新状态，更新箭头
+		if (mEnablePullRefresh && !mPullRefreshing) {
 			if (mHeaderView.getVisiableHeight() > mHeaderViewHeight) {
 				mHeaderView.releaseToRefresh();
 				mHeaderView.setState(CBRefreshState.STATE_RELEASE_TO_REFRESH);
@@ -412,7 +410,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			mLastY = ev.getRawY();
 			float dy = Math.abs((ev.getY() - mDownY));
 			float dx = Math.abs((ev.getX() - mDownX));
-			// 上下拖动
+			// updown drag
 			if((mTouchView == null || !mTouchView.isActive()) && dx<dy){
 				if (getFirstVisiblePosition() == 0 && (mHeaderView.getVisiableHeight() > 0 || deltaY > 0)) {
 					// the first item is showing, header has shown or pull down.
@@ -424,13 +422,13 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 						invokeOnScrolling();
 					}
 
-				} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getLoadMorePullUpDistance() > 0 || deltaY < 0)) {// 上拉
+				} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getLoadMorePullUpDistance() > 0 || deltaY < 0)) {// 涓婃媺
 					// last item, already pulled up or want to pull up.
 					updateFooterHeight(-deltaY / OFFSET_RADIO);
 					mFooterView.onDragSlide((float)mFooterView.getLoadMorePullUpDistance()+(-deltaY / OFFSET_RADIO));
 				}
 			}
-			// 左右拖动
+			// left and right drag
 			if (mTouchState == TOUCH_STATE_X) {
 				if (mTouchView != null) {
 					mTouchView.onSwipe(ev);
@@ -552,7 +550,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	
 	/**
-	 * 设置顶部刷新图标
+	 * set the refresh header icon
 	 * @param resName
 	 */
 	public void setHeaderRefreshIcon(int resName){
@@ -562,7 +560,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 	
 	/**
-	 * 设置底部加载更多背景
+	 * set footer view background
 	 * @param resName
 	 */
 	public void setFooterBg(int resName){
@@ -571,7 +569,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		}
 	}
 	/**
-	 * 是否显示顶部搜索栏
+	 * set topsearchbar show or not
 	 * @param show
 	 */
 	public void showTobSearchBar(boolean show){
@@ -582,13 +580,13 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		mPullRefreshListener = l;
 	}
 	
-	public void setOnItemClickListener(final CBPullRefreshListView.OnItemClickListener listener) {
+	public void setOnItemClickListener(final OnItemClickListener listener) {
 		this.setOnItemClickListener(new AbsListView.OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				if(listener!=null){
-					//因为这里加了header 必须要减去header数目才是真实的内容position　
+					//must subtract the headers count
 					listener.onItemClick(parent, view, position-headersCount, id);
 				}
 			}
@@ -648,7 +646,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	/**
-	 * 返回当前触摸的item view
+	 * 杩斿洖褰撳墠瑙︽懜鐨刬tem view
 	 * @return
 	 */
 	public SwipeMenuLayout getTouchView(){
@@ -656,7 +654,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	/**
-	 * item侧滑按钮是否打开 可以用来做事件冲突的判断
+	 *  swipe item is open?
 	 * @return
 	 */
 	public boolean isSwipeMenuOpen(){
@@ -674,7 +672,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		this.mMenuItemClickListener = itemClickListener;
 	}
 	/**
-	 * 下拉刷新的回调接口
+	 * the refresh listener
 	 */
 	public interface OnPullRefreshListener {
 		public void onRefresh();

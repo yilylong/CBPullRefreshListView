@@ -21,7 +21,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * 设置当前状态
+     * set the current state
      * @param state
      */
     @Override
@@ -30,7 +30,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * 下拉刷新的回调
+     * pull to refresh listener
      */
     @Override
     public void pullToRefresh() {
@@ -38,7 +38,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * 释放刷新的回调
+     * relase to fresh listener
      */
     @Override
     public void releaseToRefresh() {
@@ -47,7 +47,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
 
 
     /**
-     * 上拉加载更多
+     * pull up to loadmore
      */
     @Override
     public void pullUpToLoadmore() {
@@ -55,7 +55,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * 释放加载更多
+     * relase to loadmore
      */
     @Override
     public void releaseToLoadmore() {
@@ -63,20 +63,23 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * 正在刷新
+     * onrefreshing
      */
     @Override
     public void onRefreshing() {
 
     }
 
+    /**
+     * onloading
+     */
     @Override
     public void onLoading() {
 
     }
 
     /**
-     * 设置头部或底部的可见高度
+     * set the header height
      * @param height
      */
     @Override
@@ -85,7 +88,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * 获取可见高度
+     * get the header visiable height
      * @return
      */
     @Override
@@ -94,7 +97,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * 正在拖动
+     * on draging
      * @param deltaY
      */
     @Override
@@ -102,65 +105,77 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
 
     }
     /**
-     * 获取上拉底部的拉动距离
+     * get the pull up(footer) height
      */
     @Override
     public int getLoadMorePullUpDistance() {
         return 0;
     }
     /**
-     * 设置上拉底部的拉动距离
+     * set the pull up(footer) heith
      */
     @Override
     public void setLoadMorePullUpDistance(int deltaY) {
 
     }
     /**
-     * 显示底部view
+     * show  footerview
      */
     @Override
     public void footerViewShow() {
 
     }
     /**
-     * 隐藏底部view
+     * hidden footer view
      */
     @Override
     public void footerViewHide() {
 
     }
     /**
-     * 获取头部的真实内容高度
+     * get the header's real height
      */
     @Override
     public int getRealHeaderContentHeight() {
         return 0;
     }
     /**
-     * 设置下拉是否可用
+     * set pull refresh enable
      */
     @Override
     public void setPullRefreshEnable(boolean enable) {
 
     }
     /**
-     * 设置上拉是否可用
+     * set loadmore enable
      */
     @Override
     public void setLoadMoreEnable(boolean enable) {
 
     }
 
+    /**
+     * set the refresh time
+     * @param refreshTime
+     */
     @Override
     public void setRefreshTime(String refreshTime) {
 
     }
 
+    /**
+     * set the header icon
+     * @param resId
+     */
     @Override
     public void setHeaderIcon(int resId) {
 
     }
 
+    /**
+     * on style change
+     * @param state
+     */
     @Override
     public void onStyleChange(int state) {
 
