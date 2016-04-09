@@ -43,7 +43,7 @@ public class CBRefreshFooter extends CBRefreshHeaderView {
     }
 
     /**
-     * 璁剧疆搴曢儴鍔犺浇鏇村鑳屾櫙
+     * 设置底部加载更多背景
      *
      * @param resName
      */

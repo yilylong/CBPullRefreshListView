@@ -24,7 +24,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
     private ProgressBar mProgressBar;
     private TextView mHintTextView;
     private TextView mHeaderTimeView;
-    // å½“å‰çŠ¶æ€
+    // µ±Ç°×´Ì¬
     private int mState = STATE_PULL_TO_REFRESH;
     private Animation mRotateUpAnim;
     private Animation mRotateDownAnim;
@@ -47,7 +47,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
     }
 
     private void initView(Context context) {
-        // åˆå§‹æƒ…å†µï¼Œè®¾ç½®ä¸‹æ‹‰åˆ·æ–°viewé«˜åº¦ä¸º0
+        // ³õÊ¼Çé¿ö£¬ÉèÖÃÏÂÀ­Ë¢ĞÂview¸ß¶ÈÎª0
         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LayoutParams.MATCH_PARENT, 0);
         mContainer = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.cblistview_header, null);
         mHeaderViewContent = (RelativeLayout) mContainer.findViewById(R.id.cbrefresh_header_content);
@@ -73,7 +73,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
         this.mState = state;
     }
     /**
-     * è®¾ç½®é¡¶éƒ¨åˆ·æ–°å›¾æ ‡
+     * ÉèÖÃ¶¥²¿Ë¢ĞÂÍ¼±ê
      *
      * @param resName
      */
@@ -133,7 +133,7 @@ public class CBRefreshHeader extends CBRefreshHeaderView {
 
     @Override
     public int getRealHeaderContentHeight() {
-        // å› ä¸ºcontaineråˆšå¼€å§‹è®¾ç½®çš„é«˜åº¦ä¸º0æ‰€ä»¥è¿™é‡Œè¦è·å–mHeaderViewContentçš„é«˜åº¦ä¸ºçœŸå®é«˜åº¦
+        // ÒòÎªcontainer¸Õ¿ªÊ¼ÉèÖÃµÄ¸ß¶ÈÎª0ËùÒÔÕâÀïÒª»ñÈ¡mHeaderViewContentµÄ¸ß¶ÈÎªÕæÊµ¸ß¶È
         if(mHeaderViewContent!=null){
             return mHeaderViewContent.getHeight();
         }

@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.Locale;
 
 /**
- * æè¿°ï¼š
+ * ÃèÊö£º
  * Created by zhaohl on 2016-3-24.
  */
 public class Utils {
@@ -20,16 +20,16 @@ public class Utils {
         if (days >= 1) {
             updateTime = getPublishTime(TimeType.DEFAULT_YEAR, inputTime.getTime());
         } else if (hours >= 1) {
-            updateTime = hours + "å°æ—¶å‰";
+            updateTime = hours + "Ğ¡Ê±Ç°";
         } else {
             if (minutes <= 10) {
-                updateTime = "åˆšåˆš";
+                updateTime = "¸Õ¸Õ";
             } else if (minutes > 10 && minutes <= 20) {
-                updateTime = "10åˆ†é’Ÿå‰";
+                updateTime = "10·ÖÖÓÇ°";
             } else if (minutes > 20 && minutes <= 30) {
-                updateTime = "20åˆ†é’Ÿå‰";
+                updateTime = "20·ÖÖÓÇ°";
             } else if (minutes > 30 && minutes < 60) {
-                updateTime = "30åˆ†é’Ÿå‰";
+                updateTime = "30·ÖÖÓÇ°";
             }
         }
         return updateTime;
@@ -47,7 +47,7 @@ public class Utils {
                 timeStr = dateFormat.format(date);
                 break;
             case DEFAULT_CHINESS:
-                dateFormat = new SimpleDateFormat("yyyyå¹´MMæœˆddæ—¥ HHæ—¶mmåˆ†ssç§’", Locale.CHINA);
+                dateFormat = new SimpleDateFormat("yyyyÄêMMÔÂddÈÕ HHÊ±mm·ÖssÃë", Locale.CHINA);
                 timeStr = dateFormat.format(date);
                 break;
             case DEFAULT_SHORT:
@@ -55,7 +55,7 @@ public class Utils {
                 timeStr = dateFormat.format(date);
                 break;
             case DEFAULT_CHINESS_SHORT:
-                dateFormat = new SimpleDateFormat("MMæœˆddæ—¥ HHæ—¶mmåˆ†", Locale.CHINA);
+                dateFormat = new SimpleDateFormat("MMÔÂddÈÕ HHÊ±mm·Ö", Locale.CHINA);
                 timeStr = dateFormat.format(date);
                 break;
             case FROMNOW:
@@ -76,16 +76,16 @@ public class Utils {
         long minutes = interval / 60000;
         if (minutes < 60) {
             minutes = minutes == 0 ? 1 : minutes;
-            updateTime = minutes + "åˆ†é’Ÿå‰";
+            updateTime = minutes + "·ÖÖÓÇ°";
         } else {
             minutes = minutes / 60;
             minutes = minutes == 0 ? 1 : minutes;
             if (minutes < 24) {
-                updateTime = minutes + "å°æ—¶å‰";
+                updateTime = minutes + "Ğ¡Ê±Ç°";
             } else {
                 minutes = minutes / 24;
                 minutes = minutes == 0 ? 1 : minutes;
-                updateTime = minutes + "æ—¥å‰";
+                updateTime = minutes + "ÈÕÇ°";
             }
         }
         return updateTime;

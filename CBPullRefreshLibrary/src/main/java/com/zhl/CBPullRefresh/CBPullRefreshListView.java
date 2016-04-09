@@ -46,7 +46,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	private boolean mPullRefreshing = false; // is refreashing.
 	private boolean mEnablePullLoad;
-	private boolean mPullLoading;// æ­£åœ¨ä¸Šæ‹‰
+	private boolean mPullLoading;// ÕıÔÚÉÏÀ­
 	private boolean mIsFooterReady = false;
 	// total list items, used to detect is at the bottom of listview.
 	private int mTotalItemCount = 0;
@@ -69,7 +69,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private SwipeMenuCreator mMenuCreator;
 	private Interpolator mSwipeInterpolator;
 	/**
-	 * å½“å‰ç‚¹å‡»ä½ç½®æ‰€åœ¨çš„item position
+	 * µ±Ç°µã»÷Î»ÖÃËùÔÚµÄitem position
 	 */
 	private int mTouchPosition;
 	private int mTouchState;
@@ -123,7 +123,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		mFooterView = new CBRefreshFooter(context);
 		mFooterView.footerViewHide();
 		mFooterView.setOnClickListener(null);
-		// headerview å’Œfooter ä¸å†…å®¹ä¹‹é—´æ— åˆ†å‰²çº¿
+		// headerview ºÍfooter ÓëÄÚÈİÖ®¼äÎŞ·Ö¸îÏß
 		setHeaderDividersEnabled(false);
 	}
 
@@ -163,7 +163,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	@Override
 	public void setAdapter(ListAdapter adapter) {
-		// ç¡®ä¿åŠ è½½æ›´å¤šçš„å¸ƒå±€æ˜¯æœ€åä¸€ä¸ªå¹¶ä¸”åªåŠ è½½ä¸€æ¬¡
+		// È·±£¼ÓÔØ¸ü¶àµÄ²¼¾ÖÊÇ×îºóÒ»¸ö²¢ÇÒÖ»¼ÓÔØÒ»´Î
 		if (mIsFooterReady == false) {
 			mIsFooterReady = true;
 			addFooterView(mFooterView);
@@ -231,7 +231,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	/**
-	 * è®¾ç½®item Swipeæ˜¯å¦å¯ç”¨
+	 * ÉèÖÃitem SwipeÊÇ·ñ¿ÉÓÃ
 	 * @param swipeEnable
 	 */
 	public void setSwipeEnable(boolean swipeEnable){
@@ -279,7 +279,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	/**
-	 * è®¾ç½®åˆ·æ–°æ—¶é—´
+	 * ÉèÖÃË¢ĞÂÊ±¼ä
 	 * @param time
 	 */
 	public void setRefreshTime(long time){
@@ -300,7 +300,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	private void updateHeaderHeight(float delta) {
 		mHeaderView.setVisiableHeight((int) delta + mHeaderView.getVisiableHeight());
-		if (mEnablePullRefresh && !mPullRefreshing) { // æœªå¤„äºåˆ·æ–°çŠ¶æ€ï¼Œæ›´æ–°ç®­å¤´
+		if (mEnablePullRefresh && !mPullRefreshing) { // Î´´¦ÓÚË¢ĞÂ×´Ì¬£¬¸üĞÂ¼ıÍ·
 			if (mHeaderView.getVisiableHeight() > mHeaderViewHeight) {
 				mHeaderView.releaseToRefresh();
 				mHeaderView.setState(CBRefreshState.STATE_RELEASE_TO_REFRESH);
@@ -412,7 +412,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			mLastY = ev.getRawY();
 			float dy = Math.abs((ev.getY() - mDownY));
 			float dx = Math.abs((ev.getX() - mDownX));
-			// ä¸Šä¸‹æ‹–åŠ¨
+			// ÉÏÏÂÍÏ¶¯
 			if((mTouchView == null || !mTouchView.isActive()) && dx<dy){
 				if (getFirstVisiblePosition() == 0 && (mHeaderView.getVisiableHeight() > 0 || deltaY > 0)) {
 					// the first item is showing, header has shown or pull down.
@@ -424,13 +424,13 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 						invokeOnScrolling();
 					}
 
-				} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getLoadMorePullUpDistance() > 0 || deltaY < 0)) {// ä¸Šæ‹‰
+				} else if (getLastVisiblePosition() == mTotalItemCount - 1 && (mFooterView.getLoadMorePullUpDistance() > 0 || deltaY < 0)) {// ÉÏÀ­
 					// last item, already pulled up or want to pull up.
 					updateFooterHeight(-deltaY / OFFSET_RADIO);
 					mFooterView.onDragSlide((float)mFooterView.getLoadMorePullUpDistance()+(-deltaY / OFFSET_RADIO));
 				}
 			}
-			// å·¦å³æ‹–åŠ¨
+			// ×óÓÒÍÏ¶¯
 			if (mTouchState == TOUCH_STATE_X) {
 				if (mTouchView != null) {
 					mTouchView.onSwipe(ev);
@@ -552,7 +552,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 	
 	/**
-	 * è®¾ç½®é¡¶éƒ¨åˆ·æ–°å›¾æ ‡
+	 * ÉèÖÃ¶¥²¿Ë¢ĞÂÍ¼±ê
 	 * @param resName
 	 */
 	public void setHeaderRefreshIcon(int resName){
@@ -562,7 +562,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 	
 	/**
-	 * è®¾ç½®åº•éƒ¨åŠ è½½æ›´å¤šèƒŒæ™¯
+	 * ÉèÖÃµ×²¿¼ÓÔØ¸ü¶à±³¾°
 	 * @param resName
 	 */
 	public void setFooterBg(int resName){
@@ -571,7 +571,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		}
 	}
 	/**
-	 * æ˜¯å¦æ˜¾ç¤ºé¡¶éƒ¨æœç´¢æ 
+	 * ÊÇ·ñÏÔÊ¾¶¥²¿ËÑË÷À¸
 	 * @param show
 	 */
 	public void showTobSearchBar(boolean show){
@@ -588,7 +588,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
 				if(listener!=null){
-					//å› ä¸ºè¿™é‡ŒåŠ äº†header å¿…é¡»è¦å‡å»headeræ•°ç›®æ‰æ˜¯çœŸå®çš„å†…å®¹positionã€€
+					//ÒòÎªÕâÀï¼ÓÁËheader ±ØĞëÒª¼õÈ¥headerÊıÄ¿²ÅÊÇÕæÊµµÄÄÚÈİposition¡¡
 					listener.onItemClick(parent, view, position-headersCount, id);
 				}
 			}
@@ -648,7 +648,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	/**
-	 * è¿”å›å½“å‰è§¦æ‘¸çš„item view
+	 * ·µ»Øµ±Ç°´¥ÃşµÄitem view
 	 * @return
 	 */
 	public SwipeMenuLayout getTouchView(){
@@ -656,7 +656,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	}
 
 	/**
-	 * itemä¾§æ»‘æŒ‰é’®æ˜¯å¦æ‰“å¼€ å¯ä»¥ç”¨æ¥åšäº‹ä»¶å†²çªçš„åˆ¤æ–­
+	 * item²à»¬°´Å¥ÊÇ·ñ´ò¿ª ¿ÉÒÔÓÃÀ´×öÊÂ¼ş³åÍ»µÄÅĞ¶Ï
 	 * @return
 	 */
 	public boolean isSwipeMenuOpen(){
@@ -674,7 +674,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 		this.mMenuItemClickListener = itemClickListener;
 	}
 	/**
-	 * ä¸‹æ‹‰åˆ·æ–°çš„å›è°ƒæ¥å£
+	 * ÏÂÀ­Ë¢ĞÂµÄ»Øµ÷½Ó¿Ú
 	 */
 	public interface OnPullRefreshListener {
 		public void onRefresh();

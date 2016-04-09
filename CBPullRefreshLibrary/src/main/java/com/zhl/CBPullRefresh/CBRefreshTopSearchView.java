@@ -26,7 +26,7 @@ public class CBRefreshTopSearchView extends CBRefreshHeaderView {
 	}
 
 	private void initView(Context context) {
-		// åˆå§‹æƒ…å†µï¼Œè®¾ç½®viewé«˜åº¦ä¸º0
+		// ³õÊ¼Çé¿ö£¬ÉèÖÃview¸ß¶ÈÎª0
 		LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, 0);
 		container = (LinearLayout) LayoutInflater.from(context).inflate(R.layout.cbpullrefrsh_topsearch, null);
 		searchImg = (ImageView) container.findViewById(R.id.pull2reresh_top_search);

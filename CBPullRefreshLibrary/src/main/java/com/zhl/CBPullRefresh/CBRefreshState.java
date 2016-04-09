@@ -1,33 +1,33 @@
 package com.zhl.CBPullRefresh;
 
 /**
- * æè¿°ï¼šåˆ·æ–°çŠ¶æ€çš„æ¥å£
+ * ÃèÊö£ºË¢ĞÂ×´Ì¬µÄ½Ó¿Ú
  * Created by zhaohl on 2016-3-22.
  */
 public interface CBRefreshState {
     /**
-     * ä¸‹æ‹‰åˆ·æ–°
+     * ÏÂÀ­Ë¢ĞÂ
      */
     public final static int STATE_PULL_TO_REFRESH = 0;
     /**
-     * é‡Šæ”¾åˆ·æ–°
+     * ÊÍ·ÅË¢ĞÂ
      */
     public final static int STATE_RELEASE_TO_REFRESH = 1;
     /**
-     * æ­£åœ¨åˆ·æ–°
+     * ÕıÔÚË¢ĞÂ
      */
     public final static int STATE_REFRESHING = 2;
     /**
-     * ä¸Šæ‹‰åŠ è½½
+     * ÉÏÀ­¼ÓÔØ
      */
     public final static int STATE_PULL_UP_TO_LOADMORE = 3;
     /**
-     * é‡Šæ”¾åŠ è½½æ›´å¤š
+     * ÊÍ·Å¼ÓÔØ¸ü¶à
      */
     public final static int STATE_RELEASE_TO_LOADMORE = 4;
 
     /**
-     * è®¾ç½®çŠ¶æ€
+     * ÉèÖÃ×´Ì¬
      */
     public void setState(int state);
 
@@ -36,7 +36,7 @@ public interface CBRefreshState {
     public void releaseToRefresh();
 
     /**
-     * ä¸Šæ‹‰åŠ è½½æ›´å¤š
+     * ÉÏÀ­¼ÓÔØ¸ü¶à
      */
     public void pullUpToLoadmore();
 
@@ -53,13 +53,13 @@ public interface CBRefreshState {
     public void onDragSlide(float deltaY);
 
     /**
-     * ä¸Šæ‹‰è·ç¦»
+     * ÉÏÀ­¾àÀë
      * @return
      */
     public int getLoadMorePullUpDistance();
 
     /**
-     * è®¾ç½®ä¸‹æ‹‰è·ç¦»
+     * ÉèÖÃÏÂÀ­¾àÀë
      * @return
      */
     public void setLoadMorePullUpDistance(int deltaY);

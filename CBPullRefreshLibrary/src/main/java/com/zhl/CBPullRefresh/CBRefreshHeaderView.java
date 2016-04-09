@@ -21,7 +21,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * è®¾ç½®å½“å‰çŠ¶æ€
+     * ÉèÖÃµ±Ç°×´Ì¬
      * @param state
      */
     @Override
@@ -30,7 +30,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * ä¸‹æ‹‰åˆ·æ–°çš„å›è°ƒ
+     * ÏÂÀ­Ë¢ĞÂµÄ»Øµ÷
      */
     @Override
     public void pullToRefresh() {
@@ -38,7 +38,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * é‡Šæ”¾åˆ·æ–°çš„å›è°ƒ
+     * ÊÍ·ÅË¢ĞÂµÄ»Øµ÷
      */
     @Override
     public void releaseToRefresh() {
@@ -47,7 +47,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
 
 
     /**
-     * ä¸Šæ‹‰åŠ è½½æ›´å¤š
+     * ÉÏÀ­¼ÓÔØ¸ü¶à
      */
     @Override
     public void pullUpToLoadmore() {
@@ -55,7 +55,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * é‡Šæ”¾åŠ è½½æ›´å¤š
+     * ÊÍ·Å¼ÓÔØ¸ü¶à
      */
     @Override
     public void releaseToLoadmore() {
@@ -63,7 +63,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * æ­£åœ¨åˆ·æ–°
+     * ÕıÔÚË¢ĞÂ
      */
     @Override
     public void onRefreshing() {
@@ -76,7 +76,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * è®¾ç½®å¤´éƒ¨æˆ–åº•éƒ¨çš„å¯è§é«˜åº¦
+     * ÉèÖÃÍ·²¿»òµ×²¿µÄ¿É¼û¸ß¶È
      * @param height
      */
     @Override
@@ -85,7 +85,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * è·å–å¯è§é«˜åº¦
+     * »ñÈ¡¿É¼û¸ß¶È
      * @return
      */
     @Override
@@ -94,7 +94,7 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
     }
 
     /**
-     * æ­£åœ¨æ‹–åŠ¨
+     * ÕıÔÚÍÏ¶¯
      * @param deltaY
      */
     @Override
@@ -102,49 +102,49 @@ public  class CBRefreshHeaderView extends LinearLayout implements CBRefreshState
 
     }
     /**
-     * è·å–ä¸Šæ‹‰åº•éƒ¨çš„æ‹‰åŠ¨è·ç¦»
+     * »ñÈ¡ÉÏÀ­µ×²¿µÄÀ­¶¯¾àÀë
      */
     @Override
     public int getLoadMorePullUpDistance() {
         return 0;
     }
     /**
-     * è®¾ç½®ä¸Šæ‹‰åº•éƒ¨çš„æ‹‰åŠ¨è·ç¦»
+     * ÉèÖÃÉÏÀ­µ×²¿µÄÀ­¶¯¾àÀë
      */
     @Override
     public void setLoadMorePullUpDistance(int deltaY) {
 
     }
     /**
-     * æ˜¾ç¤ºåº•éƒ¨view
+     * ÏÔÊ¾µ×²¿view
      */
     @Override
     public void footerViewShow() {
 
     }
     /**
-     * éšè—åº•éƒ¨view
+     * Òş²Øµ×²¿view
      */
     @Override
     public void footerViewHide() {
 
     }
     /**
-     * è·å–å¤´éƒ¨çš„çœŸå®å†…å®¹é«˜åº¦
+     * »ñÈ¡Í·²¿µÄÕæÊµÄÚÈİ¸ß¶È
      */
     @Override
     public int getRealHeaderContentHeight() {
         return 0;
     }
     /**
-     * è®¾ç½®ä¸‹æ‹‰æ˜¯å¦å¯ç”¨
+     * ÉèÖÃÏÂÀ­ÊÇ·ñ¿ÉÓÃ
      */
     @Override
     public void setPullRefreshEnable(boolean enable) {
 
     }
     /**
-     * è®¾ç½®ä¸Šæ‹‰æ˜¯å¦å¯ç”¨
+     * ÉèÖÃÉÏÀ­ÊÇ·ñ¿ÉÓÃ
      */
     @Override
     public void setLoadMoreEnable(boolean enable) {
