@@ -65,7 +65,6 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private OnMenuItemClickListener mMenuItemClickListener;
 	private SwipeMenuLayout mTouchView;
 	private long refreshTime;
-	private boolean swipeEnable;
 	private SwipeMenuCreator mMenuCreator;
 	private Interpolator mSwipeInterpolator;
 	private int mTouchPosition;
@@ -76,6 +75,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	private int MAX_X = 3;
 	private OnSwipeListener mOnSwipeListener;
 	private Context context;
+	private boolean swipeEnable = true;
 	/**
 	 * @param context
 	 */
@@ -233,7 +233,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 	 * @param swipeEnable
 	 */
 	public void setSwipeEnable(boolean swipeEnable){
-
+		this.swipeEnable = swipeEnable;
 	}
 
 	/**
@@ -385,7 +385,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 			mTouchPosition = pointToPosition((int) ev.getX(), (int) ev.getY());
 
-			if (mTouchPosition == oldPos && mTouchView != null && mTouchView.isOpen()) {
+			if (swipeEnable&&mTouchPosition == oldPos && mTouchView != null && mTouchView.isOpen()) {
 				mTouchState = TOUCH_STATE_X;
 				mTouchView.onSwipe(ev);
 				return true;
@@ -393,7 +393,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
 			View view = getChildAt(mTouchPosition - getFirstVisiblePosition());
 
-			if ((mTouchView != null && mTouchView.isOpen())||(mTouchView != null && mTouchView.isActive())) {
+			if ((swipeEnable&&mTouchView != null && mTouchView.isOpen())||(swipeEnable&&mTouchView != null && mTouchView.isActive())) {
 				mTouchView.smoothCloseMenu();
 				mTouchView = null;
 				return super.onTouchEvent(ev);
@@ -401,7 +401,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			if (view instanceof SwipeMenuLayout) {
 				mTouchView = (SwipeMenuLayout) view;
 			}
-			if (mTouchView != null) {
+			if (swipeEnable&&mTouchView != null) {
 				mTouchView.onSwipe(ev);
 			}
 			break;
@@ -430,7 +430,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			}
 			// left and right drag
 			if (mTouchState == TOUCH_STATE_X) {
-				if (mTouchView != null) {
+				if (swipeEnable&&mTouchView != null) {
 					mTouchView.onSwipe(ev);
 				}
 				getSelector().setState(new int[]{0});
@@ -442,7 +442,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 					mTouchState = TOUCH_STATE_Y;
 				} else if (dx > MAX_X) {
 					mTouchState = TOUCH_STATE_X;
-					if (mOnSwipeListener != null) {
+					if (swipeEnable&&mOnSwipeListener != null) {
 						mOnSwipeListener.onSwipeStart(mTouchPosition);
 					}
 				}
@@ -474,14 +474,14 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 			}
 
 			if (mTouchState == TOUCH_STATE_X) {
-				if (mTouchView != null) {
+				if (swipeEnable&&mTouchView != null) {
 					mTouchView.onSwipe(ev);
 					if (!mTouchView.isOpen()) {
 						mTouchPosition = -1;
 						mTouchView = null;
 					}
 				}
-				if (mOnSwipeListener != null) {
+				if (swipeEnable&&mOnSwipeListener != null) {
 					mOnSwipeListener.onSwipeEnd(mTouchPosition);
 				}
 				ev.setAction(MotionEvent.ACTION_CANCEL);
