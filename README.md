@@ -74,6 +74,11 @@ CBPullRefreshListView一些其他方法：
 -
     mListView.showTobSearchBar(true);
     mListView.setTopSearchBar(myTopSearchBar);
+    
+设置swipe开关
+-
+
+    mListView.setSwipeEnable(false)
 
 设置下拉刷新的监听接口
 -
