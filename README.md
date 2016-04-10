@@ -4,6 +4,10 @@
 <img src="GIF2.gif" width="320px"><br/>
 <img src="GIF3.gif" width="320px">
 
+使用：
+-
+    compile 'com.zhl.CBPullRefresh:CBPullRefreshLibrary:1.0.2'
+
 自定义刷新头
 ---
 继承CBRefreshHeaderView 实现几个状态下的回调的方法比如：
