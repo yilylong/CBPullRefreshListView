@@ -43,6 +43,12 @@ public class MainActivity extends AppCompatActivity {
         mListView.setPullLoadMoreEnable(true);
 //        mListView.setSwipeEnable(false);
         mListView.showTobSearchBar(true);
+        mListView.setOnSearchBarClickListener(new CBPullRefreshListView.OnSearchClickListener() {
+            @Override
+            public void onSearchBarClick() {
+                Toast.makeText(MainActivity.this, "点击了搜索栏", Toast.LENGTH_SHORT).show();
+            }
+        });
         mListView.setOnPullRefreshListener(new CBPullRefreshListView.OnPullRefreshListener() {
             @Override
             public void onRefresh() {
