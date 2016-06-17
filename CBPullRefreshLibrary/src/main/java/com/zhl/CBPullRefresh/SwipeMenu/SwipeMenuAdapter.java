@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.LinearInterpolator;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
@@ -48,8 +49,8 @@ public class SwipeMenuAdapter implements WrapperListAdapter, SwipeMenuView.OnSwi
 			SwipeMenuView menuView = new SwipeMenuView(menu);
 			menuView.setOnSwipeItemClickListener(this);
 //			CBPullRefreshListView listView = (CBPullRefreshListView) parent;
-			layout = new SwipeMenuLayout(contentView, menuView, null,
-					null);
+			layout = new SwipeMenuLayout(contentView, menuView, new LinearInterpolator(),
+					new LinearInterpolator());
 			layout.setPosition(position);
 		} else {
 			layout = (SwipeMenuLayout) convertView;

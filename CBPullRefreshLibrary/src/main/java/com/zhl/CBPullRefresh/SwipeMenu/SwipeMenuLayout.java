@@ -152,8 +152,35 @@ public class SwipeMenuLayout extends FrameLayout {
             }
             break;
         }
-        return true;
+        return false;
     }
+
+    /**
+     * 滑动侧滑菜单
+     * @param dis
+     */
+    public void swipeMenuSlide(int dis){
+        if (state == STATE_OPEN) {
+            dis += mMenuView.getWidth();
+        }
+        swipe(dis);
+    }
+
+    /**
+     * 手指快速滑动的时候是打开还是关闭侧滑菜单
+     * @param isFling
+     * @param dix
+     */
+    public void swipeMenuFling(boolean isFling,int dix){
+        if (isFling || dix > (mMenuView.getWidth() / 2)) {
+            // open
+            smoothOpenMenu();
+        } else {
+            // close
+            smoothCloseMenu();
+        }
+    }
+
 
     public boolean isOpen() {
         return state == STATE_OPEN;

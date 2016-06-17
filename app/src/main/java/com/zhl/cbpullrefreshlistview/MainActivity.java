@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         mListView.setAdapter(mAdatper = new TestAdapter());
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadMoreEnable(true);
-//        mListView.setSwipeEnable(false);
+        mListView.setSwipeEnable(true);
         mListView.showTobSearchBar(true);
         mListView.setOnSearchBarClickListener(new CBPullRefreshListView.OnSearchClickListener() {
             @Override

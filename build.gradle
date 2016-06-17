@@ -12,8 +12,14 @@ buildscript {
         // in the individual module build.gradle files
     }
 }
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
+allprojects {
+    tasks.withType(Javadoc) {
+        options{
+            encoding "UTF-8"
+            charSet 'UTF-8'
+            links "http://docs.oracle.com/javase/7/docs/api"
+        }
+    }
 }
 allprojects {
     repositories {
