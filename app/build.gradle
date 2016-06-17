@@ -10,7 +10,7 @@ android {
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
-        renderscriptTargetApi 23
+        renderscriptTargetApi 20
         renderscriptSupportModeEnabled true
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
