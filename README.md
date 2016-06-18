@@ -7,9 +7,9 @@
 
 使用：
 -
-    compile 'com.zhl.CBPullRefresh:CBPullRefreshLibrary:1.0.3'
+    compile 'com.zhl.cbpullrefresh:CBPullRefreshLibrary:1.0.0'
     
-1.0.3修改了touch事件修复卡顿
+重新修改了下包名重新上传
 -
 
 自定义刷新头
