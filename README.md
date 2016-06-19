@@ -7,7 +7,7 @@
 
 使用：
 -
-    compile 'com.zhl.cbpullrefresh:CBPullRefreshLibrary:1.0.0'
+    compile 'com.zhl.cbpullrefresh.CBPullRefreshLibrary:1.0.0'
     
 重新修改了下包名重新上传
 -
