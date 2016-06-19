@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh.SwipeMenu;
+package com.zhl.cbpullrefresh.SwipeMenu;
 
 import android.content.Context;
 import android.support.v4.view.GestureDetectorCompat;

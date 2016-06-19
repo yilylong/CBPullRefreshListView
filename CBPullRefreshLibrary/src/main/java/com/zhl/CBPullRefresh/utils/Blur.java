@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh.utils;
+package com.zhl.cbpullrefresh.utils;
 
 import android.content.Context;
 import android.graphics.Bitmap;

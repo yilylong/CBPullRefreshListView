@@ -1,8 +1,8 @@
-package com.zhl.CBPullRefresh.utils;
+package com.zhl.cbpullrefresh.utils;
 
 import android.content.Context;
 
-import com.zhl.CBPullRefresh.R;
+import com.zhl.cbpullrefresh.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

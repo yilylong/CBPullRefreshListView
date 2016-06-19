@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh.titanic;
+package com.zhl.cbpullrefresh.titanic;
 
 
 import android.content.Context;
@@ -12,7 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.zhl.CBPullRefresh.R;
+import com.zhl.cbpullrefresh.R;
 
 
 public class TitanicTextView extends TextView {

@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh;
+package com.zhl.cbpullrefresh;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -13,8 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.zhl.CBPullRefresh.titanic.Titanic;
-import com.zhl.CBPullRefresh.titanic.TitanicTextView;
+import com.zhl.cbpullrefresh.titanic.Titanic;
+import com.zhl.cbpullrefresh.titanic.TitanicTextView;
 
 
 public class CBRefreshHeader extends CBRefreshHeaderView {

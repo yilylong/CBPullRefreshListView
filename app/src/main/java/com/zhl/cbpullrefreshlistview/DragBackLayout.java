@@ -16,7 +16,7 @@ import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.Scroller;
 
-import com.zhl.CBPullRefresh.CBPullRefreshListView;
+import com.zhl.cbpullrefresh.CBPullRefreshListView;
 
 import java.util.LinkedList;
 import java.util.List;

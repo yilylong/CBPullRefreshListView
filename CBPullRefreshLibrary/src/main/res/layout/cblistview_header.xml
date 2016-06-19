@@ -9,7 +9,7 @@
         android:layout_width="fill_parent"
         android:layout_height="80dp">
 
-        <com.zhl.CBPullRefresh.titanic.TitanicTextView
+        <com.zhl.cbpullrefresh.titanic.TitanicTextView
             android:id="@+id/cbrefresh_header_anim"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

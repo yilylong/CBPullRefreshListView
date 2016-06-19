@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh.SwipeMenu;
+package com.zhl.cbpullrefresh.SwipeMenu;
 
 import android.text.TextUtils;
 import android.view.Gravity;

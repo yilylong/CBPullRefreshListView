@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh.titanic;
+package com.zhl.cbpullrefresh.titanic;
 
 import android.animation.Animator;
 import android.animation.AnimatorSet;

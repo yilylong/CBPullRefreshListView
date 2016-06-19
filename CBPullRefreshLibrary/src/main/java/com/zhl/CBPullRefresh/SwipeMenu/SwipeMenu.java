@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh.SwipeMenu;
+package com.zhl.cbpullrefresh.SwipeMenu;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh;
+package com.zhl.cbpullrefresh;
 
 import android.content.Context;
 import android.util.AttributeSet;

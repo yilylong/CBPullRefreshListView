@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
-version = "1.0.3"
+version = "1.0.0"
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.2"
@@ -34,7 +34,7 @@ tasks.withType(JavaCompile) {
 }
 def siteUrl = 'https://github.com/yilylong/CBPullRefreshListView'      // 项目的主页
 def gitUrl = 'https://github.com/yilylong/CBPullRefreshListView.git'   // Git仓库的url
-group = "com.zhl.CBPullRefresh"
+group = "com.zhl.cbpullrefresh"
 install {
     repositories.mavenInstaller {
         pom {

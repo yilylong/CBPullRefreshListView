@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh;
+package com.zhl.cbpullrefresh;
 
 /**
  * 描述：刷新状态的接口

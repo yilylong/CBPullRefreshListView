@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh.utils;
+package com.zhl.cbpullrefresh.utils;
 
 public enum TimeType {
 	/**

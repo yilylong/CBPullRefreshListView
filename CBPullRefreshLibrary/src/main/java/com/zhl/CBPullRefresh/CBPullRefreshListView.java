@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh;
+package com.zhl.cbpullrefresh;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -20,12 +20,12 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.Scroller;
 
-import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenu;
-import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuAdapter;
-import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuCreator;
-import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuLayout;
-import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuView;
-import com.zhl.CBPullRefresh.utils.Utils;
+import com.zhl.cbpullrefresh.SwipeMenu.SwipeMenu;
+import com.zhl.cbpullrefresh.SwipeMenu.SwipeMenuAdapter;
+import com.zhl.cbpullrefresh.SwipeMenu.SwipeMenuCreator;
+import com.zhl.cbpullrefresh.SwipeMenu.SwipeMenuLayout;
+import com.zhl.cbpullrefresh.SwipeMenu.SwipeMenuView;
+import com.zhl.cbpullrefresh.utils.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

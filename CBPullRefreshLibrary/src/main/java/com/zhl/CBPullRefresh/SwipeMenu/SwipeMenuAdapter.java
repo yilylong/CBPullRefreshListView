@@ -1,4 +1,4 @@
-package com.zhl.CBPullRefresh.SwipeMenu;
+package com.zhl.cbpullrefresh.SwipeMenu;
 
 import android.content.Context;
 import android.database.DataSetObserver;
@@ -10,7 +10,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ListAdapter;
 import android.widget.WrapperListAdapter;
 
-import com.zhl.CBPullRefresh.CBPullRefreshListView;
+import com.zhl.cbpullrefresh.CBPullRefreshListView;
 
 public class SwipeMenuAdapter implements WrapperListAdapter, SwipeMenuView.OnSwipeItemClickListener {
 	
