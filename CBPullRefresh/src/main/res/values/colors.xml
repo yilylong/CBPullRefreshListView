@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFF</color>
+    <color name="pull2refresh_top_bg">#ECEDED</color>
+    <color name="green">#3fbecc</color>
+    <color name="red">#f1494c</color>
+    <color name="top_refresh_bg">#efefef</color>
+    <color name="footer_load_bg_pre">#f1f1f1</color>
+    <color name="divider">#a6a7a6</color>
+</resources>

@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">PullRefreshLibrary</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+    <string name="refresh_header_tip_pull2refresh">下拉刷新</string>
+    <string name="refresh_header_tip_release2refresh">松开刷新数据</string>
+    <string name="refresh_header_tip_refreshing">正在刷新...</string>
+    <string name="refresh_footer_tip_loading">正在加载...</string>
+    <string name="refresh_footer_tip_pullup_loadmore">上拉加载更多</string>
+    <string name="refresh_footer_tip_release_loadmore">松开载入更多</string>
+    <string name="util_hours_ago">小时前</string>
+    <string name="util_a_moment_ago">刚刚</string>
+    <string name="util_10_moment_ago">10分钟前</string>
+    <string name="util_20_moment_ago">20分钟前</string>
+    <string name="util_30_moment_ago">30分钟前</string>
+    <string name="util_format_yyyymmdd_hhmmss">yyyy年MM月dd日 HH时mm分ss秒</string>
+    <string name="util_format_mmdd_hhmm">MM月dd日 HH时mm分</string>
+    <string name="util_miniutes_ago">分钟前</string>
+    <string name="util_day_ago">日前</string>
+</resources>
