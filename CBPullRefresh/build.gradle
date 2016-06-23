@@ -80,7 +80,7 @@ install {
         pom.project {
             packaging 'aar'
             groupId 'com.zhl.CBPullRefresh' //自己定义的组名
-            artifactId 'CBPullrefreshListview'
+            artifactId 'CBPullRefresh'
 
             name 'CBPullrefreshListview'
             description descr
