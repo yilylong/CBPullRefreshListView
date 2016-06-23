@@ -41,6 +41,11 @@ dependencies {
 //        charSet 'UTF-8'
 //    }
 //}
+ext {
+    siteUrl = 'https://github.com/yilylong/CBPullRefreshListView'
+    gitUrl = 'https://github.com/yilylong/CBPullRefreshListView.git'
+    descr = 'a pull to refresh listview with swipe menu'
+}
 
 task sourcesJar(type: Jar) {
     from android.sourceSets.main.java.srcDirs
@@ -78,8 +83,8 @@ install {
             artifactId 'CBPullrefreshListview'
 
             name 'CBPullrefreshListview'
-            description 'a pull to refresh listview with swipe menu'
-            url 'https://github.com/yilylong/CBPullRefreshListView'
+            description descr
+            url siteUrl
             inceptionYear '2016'
 
             licenses {
@@ -90,8 +95,8 @@ install {
                 }
             }
             scm {
-                connection 'https://github.com/yilylong/CBPullRefreshListView.git'
-                url 'https://github.com/yilylong/CBPullRefreshListView'
+                connection gitUrl
+                url siteUrl
 
             }
             developers {
@@ -118,8 +123,8 @@ bintray {
         //填入 bintray 上对应的 package 信息
         repo = 'maven'
         name = 'CBPullrefreshListview'
-        vcsUrl = 'https://github.com/yilylong/CBPullRefreshListView.git'
-        websiteUrl = 'https://github.com/yilylong/CBPullRefreshListView'
+        vcsUrl = gitUrl
+        websiteUrl = siteUrl
         licenses = ['Apache-2.0']
         issueTrackerUrl = 'https://github.com/yilylong/CBPullRefreshListView/issues'
         publicDownloadNumbers = true
@@ -131,6 +136,38 @@ bintray {
         }
     }
 }
+task createPom {
+    pom {
+        project {
+            packaging 'aar'
+
+            name project.name
+            description descr
+            url siteUrl
+            inceptionYear '2016'
+
+            licenses {
+                license {
+                    name 'The Apache Software License, Version 2.0'
+                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                }
+            }
+            scm {
+                connection gitUrl
+                developerConnection gitUrl
+                url siteUrl
+            }
+            developers {
+                developer {
+                    id 'saschpe'
+                    name 'Sascha Peilicke'
+                    email 'sascha@peilicke.de'
+                }
+            }
+        }
+    }.writeTo("$buildDir/poms/pom-default.xml").writeTo("pom.xml")
+}
+build.dependsOn createPom
 
 // 上传bintray-------------end
 
