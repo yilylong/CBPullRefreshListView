@@ -5,12 +5,6 @@
 <img src="GIF2.gif" width="320px"><br/>
 <img src="GIF3.gif" width="320px">
 
-使用：
--
-    compile 'com.zhl.cbpullrefresh.CBPullRefreshLibrary:1.0.0'
-    
-重新修改了下包名重新上传
--
 
 自定义刷新头
 ---
