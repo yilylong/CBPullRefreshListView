@@ -147,6 +147,9 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
 
             @Override
             public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, float velocityY) {
+                if(e1==null){
+                    return false;
+                }
                 if ((e1.getX() - e2.getX()) > MIN_FLING && velocityX < MAX_VELOCITYX) {
                     isFling = true;
                 }
@@ -403,12 +406,6 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
         }
     }
 
-    // 这里是解决mGestureDetector 的onfling MotionEvent e1==null 的情况
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        mGestureDetector.onTouchEvent(ev);
-        return super.onInterceptTouchEvent(ev);
-    }
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
         mGestureDetector.onTouchEvent(ev);
