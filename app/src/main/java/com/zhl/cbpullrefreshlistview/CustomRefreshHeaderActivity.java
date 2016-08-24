@@ -47,6 +47,7 @@ public class CustomRefreshHeaderActivity extends AppCompatActivity {
         mListView.setAdapter(mAdatper = new TestAdapter());
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadMoreEnable(true);
+        mListView.setSwipeEnable(true);
 //        mListView.showTobSearchBar(true);
         mListView.setOnPullRefreshListener(new CBPullRefreshListView.OnPullRefreshListener() {
             @Override

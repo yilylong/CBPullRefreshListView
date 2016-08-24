@@ -20,6 +20,7 @@
             android:name=".DragbackActivity"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity android:name=".CustomRefreshHeaderActivity"/>
+        <activity android:name=".CustomRefreshHeaderRippleActivity"/>
 
     </application>
 

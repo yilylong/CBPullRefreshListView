@@ -30,4 +30,5 @@ dependencies {
     compile project(':CBPullRefresh')
     compile 'com.wang.avi:library:1.0.5'
     compile 'com.nineoldandroids:library:2.4.0'
+    compile 'com.rodolfonavalon:ShapeRippleLibrary:0.2.0'
 }

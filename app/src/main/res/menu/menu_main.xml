@@ -12,4 +12,9 @@
         android:orderInCategory="101"
         android:title="@string/action_jump_customheader"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_custom_header2"
+        android:orderInCategory="101"
+        android:title="@string/action_jump_customheader2"
+        app:showAsAction="never" />
 </menu>

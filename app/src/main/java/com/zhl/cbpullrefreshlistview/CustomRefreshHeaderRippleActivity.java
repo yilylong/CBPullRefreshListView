@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,33 +23,31 @@ import com.zhl.CBPullRefresh.SwipeMenu.SwipeMenuItem;
 
 import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class CustomRefreshHeaderRippleActivity extends AppCompatActivity {
     private TestAdapter mAdatper;
     private ArrayList<String> DataList = new ArrayList<String>();
     private CBPullRefreshListView mListView;
+    private ImageView blurView,blurContentView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_custom_header_layout_ripple);
         initData();
         initView();
     }
 
     private void initView() {
+        blurView = (ImageView) findViewById(R.id.blur_view);
+        blurContentView = (ImageView) findViewById(R.id.blur_orign);
         mListView = (CBPullRefreshListView) findViewById(R.id.listview);
-//        mListView.setRefreshHeader(new CBRefreshHeader(this));
+        MyCustomRrefreshHeaderRippleColor myRefreshHeader = new MyCustomRrefreshHeaderRippleColor(this);
+        mListView.setRefreshHeader(myRefreshHeader);
         mListView.setAdapter(mAdatper = new TestAdapter());
+        mListView.setSwipeEnable(true);
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadMoreEnable(true);
-        mListView.setSwipeEnable(true);
-        mListView.showTobSearchBar(true);
-        mListView.setOnSearchBarClickListener(new CBPullRefreshListView.OnSearchClickListener() {
-            @Override
-            public void onSearchBarClick() {
-                Toast.makeText(MainActivity.this, "点击了搜索栏", Toast.LENGTH_SHORT).show();
-            }
-        });
+//        mListView.showTobSearchBar(true);
         mListView.setOnPullRefreshListener(new CBPullRefreshListView.OnPullRefreshListener() {
             @Override
             public void onRefresh() {
@@ -57,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         mListView.stopRefresh();
                     }
-                }, 3000);
+                }, 10000);
             }
 
             @Override
@@ -67,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
                     public void run() {
                         mListView.stopLoadMore();
                     }
-                }, 3000);
+                }, 10000);
             }
 
             @Override
@@ -83,35 +82,35 @@ public class MainActivity extends AppCompatActivity {
 
                 SwipeMenuItem collectionItem = new SwipeMenuItem(getApplicationContext());
                 collectionItem.setBackground(R.color.green);
-                collectionItem.setWidth(dp2px(MainActivity.this, 90));
+                collectionItem.setWidth(dp2px(CustomRefreshHeaderRippleActivity.this, 90));
                 collectionItem.setTitle("收藏");
                 collectionItem.setTitleSize(18);
                 collectionItem.setTitleColor(Color.WHITE);
-                collectionItem.setIcon(R.drawable.icon_collection);
+//                collectionItem.setIcon(R.drawable.icon_collection);
                 menu.addMenuItem(collectionItem);
 
                 SwipeMenuItem deleteItem = new SwipeMenuItem(getApplicationContext());
                 deleteItem.setBackground(R.color.red);
-                deleteItem.setWidth(dp2px(MainActivity.this, 90));
+                deleteItem.setWidth(dp2px(CustomRefreshHeaderRippleActivity.this, 90));
                 deleteItem.setTitle("删除");
-                deleteItem.setIcon(R.drawable.icon_delete);
+//                deleteItem.setIcon(R.drawable.icon_delete);
                 deleteItem.setTitleSize(18);
                 deleteItem.setTitleColor(Color.WHITE);
                 menu.addMenuItem(deleteItem);
             }
         };
-        // set creator
+//         set creator
         mListView.setMenuCreator(creator);
         mListView.setOnMenuItemClickListener(new CBPullRefreshListView.OnMenuItemClickListener() {
             @Override
             public void onMenuItemClick(int position, SwipeMenu menu, int index) {
-                Toast.makeText(MainActivity.this, "点击了item swipe 菜单的第" + index, Toast.LENGTH_SHORT).show();
+                Toast.makeText(CustomRefreshHeaderRippleActivity.this, "点击了item swipe 菜单的第" + index, Toast.LENGTH_SHORT).show();
             }
         });
         mListView.setOnItemClickListener(new CBPullRefreshListView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(MainActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
+                Toast.makeText(CustomRefreshHeaderRippleActivity.this,"点击了"+position,Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -135,14 +134,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_settings:
                 Intent intent = new Intent(this,DragbackActivity.class);
                 startActivity(intent);
-                break;
-            case R.id.action_custom_header:
-                Intent intent2 = new Intent(this,CustomRefreshHeaderActivity.class);
-                startActivity(intent2);
-                break;
-            case R.id.action_custom_header2:
-                Intent intent3 = new Intent(this,CustomRefreshHeaderRippleActivity.class);
-                startActivity(intent3);
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -171,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
             ViewHolder viewHolder = null;
             if (convertView == null) {
                 viewHolder = new ViewHolder();
-                convertView = getLayoutInflater().inflate(R.layout.item_listview, parent, false);
+                convertView = getLayoutInflater().inflate(R.layout.item_listview3, parent, false);
                 viewHolder.title = (TextView) convertView.findViewById(R.id.item_title);
                 convertView.setTag(viewHolder);
             } else {
