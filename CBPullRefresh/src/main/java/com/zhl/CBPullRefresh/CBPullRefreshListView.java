@@ -597,7 +597,7 @@ public class CBPullRefreshListView extends ListView implements OnScrollListener 
      *
      * @param show
      */
-    public void showTobSearchBar(boolean show) {
+    public void showTopSearchBar(boolean show) {
         this.showTopSearchBar = show;
     }
 
