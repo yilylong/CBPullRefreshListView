@@ -1,22 +1,21 @@
 apply plugin: 'com.android.library'
-apply plugin: 'com.github.dcendents.android-maven'
-apply plugin: 'com.jfrog.bintray'
-//apply plugin: 'com.novoda.bintray-release'
-version = "1.0.0"
 android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
+    compileSdkVersion 25
+    buildToolsVersion "25.0.2"
 
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 23
         versionCode 1
-        versionName "1.0"
+        versionName "1.0.0"
         renderscriptTargetApi 20
         renderscriptSupportModeEnabled true
         ndk {
             abiFilters "armeabi", "armeabi-v7a", "x86", "mips"
         }
+    }
+    lintOptions {
+        abortOnError false
     }
     buildTypes {
         release {
@@ -28,157 +27,8 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:23.2.0'
-    compile 'com.android.support:support-v4:23.4.0'
+    compile 'com.android.support:appcompat-v7:25.0.0'
+    compile 'com.android.support:support-v4:25.0.0'
 }
 
 
-// 上传bintray-------------start
-
-//javadoc { //javadoc采用utf-8编码否则会报“GBK的不可映射字符”错误
-//    options {
-//        encoding "UTF-8"
-//        charSet 'UTF-8'
-//    }
-//}
-ext {
-    siteUrl = 'https://github.com/yilylong/CBPullRefreshListView'
-    gitUrl = 'https://github.com/yilylong/CBPullRefreshListView.git'
-    descr = 'a pull to refresh listview with swipe menu'
-}
-
-task sourcesJar(type: Jar) {
-    from android.sourceSets.main.java.srcDirs
-    classifier = 'sources'
-}
-
-task javadoc(type: Javadoc) {
-    source = android.sourceSets.main.java.srcDirs
-    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-}
-
-task javadocJar(type: Jar, dependsOn: javadoc) {
-    classifier = 'javadoc'
-    from javadoc.destinationDir
-}
-tasks.withType(JavaCompile) {
-    options.encoding = "UTF-8"
-}
-
-artifacts {
-    archives javadocJar
-    archives sourcesJar
-}
-
-task findConventions << {
-    println project.getConvention()
-}
-
-group = 'com.zhl.CBPullRefresh'
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            packaging 'aar'
-            groupId 'com.zhl.CBPullRefresh' //自己定义的组名
-            artifactId 'CBPullRefresh'
-
-            name 'CBPullrefreshListview'
-            description descr
-            url siteUrl
-            inceptionYear '2016'
-
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    distribution 'repo'
-                }
-            }
-            scm {
-                connection gitUrl
-                url siteUrl
-
-            }
-            developers {
-                developer {
-                    name 'yilylong'
-                    email 'yilylong@163.com'
-                }
-            }
-        }
-
-    }
-}
-
-//获取local.propertes的信息
-Properties properties = new Properties()
-properties.load(project.rootProject.file('local.properties').newDataInputStream())
-
-bintray {
-    user = properties.getProperty("bintray.user")
-    key = properties.getProperty("bintray.apikey")
-    publish = true
-    configurations = ['archives']
-    pkg {
-        //填入 bintray 上对应的 package 信息
-        repo = 'maven'
-        name = 'CBPullrefreshListview'
-        vcsUrl = gitUrl
-        websiteUrl = siteUrl
-        licenses = ['Apache-2.0']
-        issueTrackerUrl = 'https://github.com/yilylong/CBPullRefreshListView/issues'
-        publicDownloadNumbers = true
-        version {
-            name = '1.0.0'
-            desc = '1.0.0 release'
-            vcsTag = '1.0.0'
-            attributes = ['gradle-plugin': 'com.use.less:com.use.less.gradle:gradle-useless-plugin']
-        }
-    }
-}
-task createPom {
-    pom {
-        project {
-            packaging 'aar'
-
-            name project.name
-            description descr
-            url siteUrl
-            inceptionYear '2016'
-
-            licenses {
-                license {
-                    name 'The Apache Software License, Version 2.0'
-                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                }
-            }
-            scm {
-                connection gitUrl
-                developerConnection gitUrl
-                url siteUrl
-            }
-            developers {
-                developer {
-                    id 'saschpe'
-                    name 'Sascha Peilicke'
-                    email 'sascha@peilicke.de'
-                }
-            }
-        }
-    }.writeTo("$buildDir/poms/pom-default.xml").writeTo("pom.xml")
-}
-build.dependsOn createPom
-
-// 上传bintray-------------end
-
-
-
-
-//publish {
-//    userOrg = 'yilylong'//bintray.com用户名
-//    groupId = 'com.zhl.CBPullRefresh'//jcenter上的路径
-//    artifactId = 'CBPullRefreshListview'//项目名称
-//    publishVersion = '1.0.0'//版本号
-//    desc = 'a pull to refresh listview with swipe menu'//描述
-//    website = 'https://github.com/yilylong/CBPullRefreshListView'//网站
-//}
