@@ -1,3 +1,4 @@
+[![](https://jitpack.io/v/yilylong/CBPullRefreshListView.svg)](https://jitpack.io/#yilylong/CBPullRefreshListView)
 ## CBPullRefreshListView
 
 下拉刷新很常见，listview带侧滑功能的也很常见。github上将两者结合的也很多比如：[SwipeMenuListView](https://github.com/baoyongzhang/SwipeMenuListView)是带有侧滑功能的lisetview但是无法下拉刷新。而[Android-PullToRefresh-SwipeMenuListView-Sample](https://github.com/licaomeng/Android-PullToRefresh-SwipeMenuListView-Sample)是将几个功能完整结合。看了下他们的实现，是在以前的XListView基础上整合。但listview里面的下拉刷新和上拉加载的动作与刷新头耦合比较严重。如果想自定义自己的刷新头样式稍微麻烦点。于是就想把下拉刷新的功能和刷新头的展示样式抽离分开。listview只管将一些下拉上拉的事件传递出来。刷新头通过实现这些状态方法去做自己想要的刷新样式就可以了。<br/>
@@ -5,6 +6,28 @@
 <img src="GIF2.gif" width="320px"><br/>
 <img src="GIF3.gif" width="320px"><br/>
 <img src="custom_ripple.gif" width="320px"><br/>
+
+引入
+--
+
+Step 1. Add the JitPack repository to your build file
+-
+
+    allprojects {
+		repositories {
+			...
+			maven { url 'https://jitpack.io' }
+		}
+	}
+
+Step 2. Add the dependency
+-
+	dependencies {
+	        compile 'com.github.yilylong:CBPullRefreshListView:1.0.0'
+	}
+
+
+
 
 自定义刷新头
 ---
