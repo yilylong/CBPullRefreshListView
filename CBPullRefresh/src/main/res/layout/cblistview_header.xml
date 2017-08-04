@@ -17,7 +17,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:singleLine="true"
-            android:text="21世纪经济报道"
+            android:text="mypullrefeshheader"
             android:textColor="@color/green"
             android:textSize="20sp"
             android:textStyle="bold"
